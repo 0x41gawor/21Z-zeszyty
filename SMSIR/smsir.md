@@ -1,4 +1,4 @@
-# SMSIR
+# Sieci Mobilne i Sieci Internetu Rzeczy
 
 B - Blok
 
@@ -6,7 +6,7 @@ C - Część
 
 > 5G to będzie rewolucja w telekomie, bo każda fabryka będzie chciała swoją sieć 5G, która jest superszybka (minimalne opóźnienia), żeby powstawały inteligentne fabryki.
 
-## B0 Sieci komórkowe - wstęp
+# B0 Sieci komórkowe - wstęp
 
 ### Ewolucja od 2G do 5G - Timeline
 
@@ -224,73 +224,200 @@ Cała zabawa rozwoju sieci mobilnej, to się odbywa wokół tego wzoru, bo:
 
 Rysunek na przykładzie LTE.
 
-## B1 Sieci GSM
+# B1 Sieci GSM (2G)
 
-### B1C1 Architektura GSM i podsystem sieciowy
+NSS - Network SubSystem. Później (jak się pojawiły sieci pakietowe) zaczęto to nazywać Core Network. 
 
-Idea GSM dokleić dostępo mobilny/radiowy do sieci PSTN/ISDN, która już jest. W praktyce okazało się że ten pierwotnie "dostęp" rozwinął się w odzielną sieć. Bo do momentu urządzeń, które mają dostęp do sieci szkieletowej, która już była, to zrobiło się tak dużo, że aż jest to oddzielna sieć. No i pojawili się operatorzy  od samej tej sieci.
+<img src="img/21.png" style="zoom:55%;" />
 
-Zawsze w każdej technologi jest zawsze aspekt:
+Z GSM pod postacią GRPS pojawiły się pierwsze w sieciach mobilnych usługi pakietowe.
 
-- transfer danych użytkownika
-- transfer danych sterowania, po to, żeby transfer danych użytkownika mógł zaistnieć
+**GRPS** - General Packet Radio Service
 
-W sieci pakietowej jest łatwiej sterować, bo nie trzeba alokować łączy (jak EON), tu ułatwienie jest takie, że pakiet ma adres docelowy (i każde urządzenie go rozpatruje niezależnie).
+Potem powstał EDGE, taki poprawiony GPRS (lepsze przepustowości). 
+
+Później pojawił się standard UMTS, tam HSPA to już w ogóle wywindowało przepustowość.
+
+## Pierwotna idea GSM
+
+Mieliśmy wtedy dobrze rozwiniętą sieć telefoniczną PSTN/ISDN. Były tam usługi pakietowe po kablu telefonicznym. No i wymyślono sobie:
+
+> A jakby tak dołączyć do takiej sieci publicznej abonentów mobilnych, bezprzewodowych?
+
+Chodziło tylko o to, żeby do sieci, któa już jest dokleić tylko dostęp radiowy. Okazało się ile z tym jazdy, że aż ten "dostęp" rozwinął się w osobną sieć. Także w praktyce okazało się, że trzeba zrobić odrębne sieci komórkowe. I dopiero coś co nazywa się Gateway MSC ma styki z siecią publiczną i ostatecznie się wykrystalizowali operatorzy mobilny.
 
 
 
-#### Generyczne aspekty sieci mobilnych
+Sieć ISDN była bardzo dobrze rozwnięta, zestandaryzowana i chciało się z tego skorzystać, żeby się nie narobić a dołączyć do niej. Budować tylko to co jest niezbędne.
 
-W każdym "G" są te aspekty i koniec kropka.
 
-Zasoby radiowe, to jest coś co trzeba sobie dzielić. Jak firma ma wykupione jakieś pasmo, to nie ma nigdy tak, ze klientowi da pare kHz na stałe. Jak ktoś ma potrzebę to korzysta z zasobu jak nie ma to mu się zabiera. Więc cały czas trzeba patrzeć kto co ma i kontrolować to, zabierać itp.
 
-Sieci komórkowe wprowadziły nowe usługi np. SMS. Kiedyś to było używane do informowania od operatora, potem dopiero komercjalizacja poszła a dzisiaj to głównie alerty RCB.
+Dlatego wzięto ISDN jako klasa bazowa i chciano ją zmodyfikować i stworzyć sieć radiową, żeby dało się tym dołączyć do prawdziwej ISDN.
 
-Sterowanie zgłoszeniami- czyli słuchanie co user chce zrobić, czy rozmowa, czy smski czy coś
+<img src="img/22.png" style="zoom:75%;" />
 
-#### Podstawowe koncepcje (1)
+Czyli widać, że trzeba się zająć dostępem do sieci (bo jest bezprzewodowy i abonenci się poruszają) oraz sterowaniem zgłoszeniami, a cała reszta mogła zostać i być bardzo podobna jak to było w ISDN.
 
-komórka 
+> I to widać w architekturze jak sieć mobilna wykorzstuje system syngalizacji nr 7, tak głęboko jak się tylko da. itd. Natomiast to co trzeba było dobudować, co wynikało z mobilności, to dorobiono.
 
-> wszystko zależy od ukształtowania terenu
+## Generyczne aspekty sieci mobilnych
 
-Terminal na początku połączenie dostaje od sieci listę stacji bazowych, które ma monitorować w kontekście jakości sygnału i wysyła raporty do sieci. A sieć jak trzeba to przełącza usera na inną komórkę. Sieć patrzy na moc sygnału i obiążenie sieci.
+Nie tylko GSM.
 
-#### Podstawowe koncepcje (2)
+<img src="img/23.png" style="zoom:55%;" />
 
-Póki user jest w komórce to my chcemy wiedzieć, że jest w niej po prostu, ale jak przejdzie do innej, to sieci musi wiedzieć. To jest nomadyzm. Jak terminal zmieni komórke, to musi o tym sieci powiedzieć. Stacje bazowe wysyłaja co kilkanaście milisekudn "bikony", co sieć umie, jakie ma paramsy, jej nazwa itp. I terminale widzą te stacje i pamiętają. Jak terminal widzi, że jest słabo z mocą sygnału, to ogarnia, że jest w innej komórce i się przerejestowuje i widzi nowe stacje bazowe.
+#### Zasoby radiowe
 
-Ale sieć też musi umieć znaleźć terminal jak jest zgłoszenie przychodzę (dzwoni ktoś do nas). To wtedy wszystkie stacje bazowe z komórki, gdzie temirnal jest zarejestrowany dają z anteny dookolnej sygnał, żeby terminal się zgłosił (tak jak mam krzyczy imię dziecka w piaskownicy, żeby się zgłosił). 
+To jest coś co trzeba dzielić. To jest cenne dobro, więc nie może być tak, że ktoś je weźmie na stałe. Ubiegamy się o licencje, operatorzy mają je podzielone itd. No i jak ktoś już ma jakieś pasmo, to nie jest tak, że na stałe da abonentowi 100kb/s np.
 
-Mobilność twarde, żeby była ciągłość ani bajt nie uciekł.
+Jak ktoś ma potrzebe to dostaje ten zasób, a jak nie ma potrzeby to mu się odbiera zasób i zwalnia go dla kogoś innego.  
 
-#### Usługi końcowe (... fax)
+==> Więc cały czas trzeba patrzeć kto co ma i zabierać oddawać itp.  Bo chcemy mieć jakoś usług (a to miała być sieć publiczna, więc niezawodność musiała być 99%), wszystko musi być pod ścisłą kontrolą. (nie to co w Wi-fi).
 
-Nie ma czasu :((
+#### Mobilność
 
-#### Widok ogólny - podystemy
+Po to mamy ten dostęp radiowy, żeby można było łazić czy jeździć. Przy wi-fi też jest jakaś mobilność, ale ograniczona (to tak jak przywiąże kogoś do drzewa i powiem, no jesteś mobilny w jakimś tam zakresie (zasięg sznurka)). Tu chodzi oto, żeby tego sznurka nie było. 
+Mobilności są dwie:
 
-NSS - sieć stała (Network SubSystem)
+- twarda - w trakcie połączenia
+- nomadyczna - teraz jestem tu, potem pojadę do domu, a cały czas chcę być dostępny dla sieci. Sieć musi mniej-więcej wiedzieć, gdzie jestem, żeby do mnie zadzwonić
 
-BSS część radiowa
+#### Usługi końcowe
 
-BSS zajmuje sie zestawieniem drutu
+W sieci telefonicznej był sam głos, a sieci mobilnego wprowadziły wiadomości SMS (Kiedyś to było używane do informowania od operatora, potem dopiero komercjalizacja poszła a dzisiaj to głównie alerty RCB.)	
 
-NSS pilnuje tego druta i daje dostęp temu drutowi do sieci szkieletowej
+### Poziomy/bloki sterowania
 
-Bo generalnie sieć mobilna to dostęp radiowy do sieci stałej
+<img src="img/24.png" style="zoom:75%;" />
 
-Terminal a użytkownik to dwie różne rzeczy (mogę przełożyć sima do innego urządzenia).
+Z powyższych trzech aspektów wynikają 3 generyczne bloki sterowania:
 
-Sieć stała określa dostępność usług w wymiarze światowym (np. roaming). 
+- Zarządzanie zasobami radiowymi
+  - blok funkcjonalny, który jest odpowiedzialny za zorganizowanie sposobu udzielania dostępu klientom do zasobu radiowego i pamiętajmy, to musi być w dwóch aspektach rozpatywane - płaszczyzny danych i płaszczyzny sterowania. Żebym ja mógł przesyłać dane, to muszę najpierw sieci to powiedzieć, i to powiedzenie odbywa się na tych samych zasobach radiowych. I na zasoby na data i control pane idzie jakaś rywalizacja i sieć musi to jakoś rozwiązać.
+- Zarządzanie mobilnością
+  - w aspekcie nomadycznym (od czasu do czasu terminal jak się gdzieś przemieści, to się rejestruje gdzie jest, żeby sieć wiedziała)
+  - aspekt twardy (jak mam połączenie zarezerwowane, to może one zostać poddane tzw "handover'owi")
+- Sterowanie zgłoszeniami
+  - to bardziej realizacja usług użytkownika (czyli user robi coś z siecią core za pomocą sieci radiowej np. transfer pakietów (np. VoIP))
+    - W 2G, 3G transfer pakietów to było coś kompletnie innego niż transfer głosu. Od 4G to jest to samo bo VoIP over LTE. LTE jest siecią pakietową a usługa głosowa to jest realizowana na tych pakietach właśnie. Sieć LTE nie widzi głosu tylko pakiety o parametrach do przesłania.
 
-Jak jestem we Francji i  sieć chińska dzwoni do mnie to połęczenie idzie do mojej sieci macierzystej w Polsce i dopiero tam jest info, że ja jesetm we Francji.'
+## Podstawowe koncepcje
 
-#### Podsystem NSS - elementy i styki
+### Komórka
 
-HLR - Home L.. Register  - wszystkie dane o userze, gdzie on jest itp. taka baza danych jedna na operatora
+Organizacja zasób w sieciach mobilnych odbywa się na zasadzie komórek. Obszarów relatywnie małych, które są pokryte poprzez stacje bazowe. De facto stacje bazowe to anteny. Przedstawiamy komórki jako hexagonalne obszarki, ale one nigdy nie są hexagonalne, nie ma takiej możliwości. One są kompletnie nieregularne to zależy od ukształtowania terenu, i wielu rzeczy jakie tylko sobie możemy wyobrazić. One zachodzą na siebie (jak nie zachodzą to mamy dziury (tak jak w tych moich bierszczadach)). 
 
-VLR - taki rejestr ale lokalny. taki HLR dla jednego MSC
+>  Jak jest antena sektorowa, to ona jest w narożniku i jej "dzieci" wysyłaja do niej, a może być antena dookólna i jest na środku komórki
 
-G-MSC - Gateway MSC - MSC na styku z innymi sieciami np. PSTN
+Teminal cały czasz mierzy co się dzieje dookoła (jaki zasięg skąd), jak wykryje ze jest w zasięgu lepszej stacji (zasięg lepszy) to się zamelduje w niej. Ale nawet nie - póki terminal jest w obszarze liczącym kilka komórek, to on tylko pilnuje czy jest w tym obszarze, czy on przypadkiem nie przeszedł obszaru, że on nie widzi żadnej z tych stacji bazowych, wtedy przerejestruje się mówicą sieci "jestem już nie w tej piaskownicy tylko innej". Żeby sieć mniej więcej widziała, gdzie on jest.
+Natomiast jak on gada teraz, to cały czas śle komunikaty pomiary z tego co widzi naookoło. Terminal jak zaczyna połączenie to dostaje od sieci listę stacji bazowych, które ma monitorować pod kątem jakości sygnału i raporty wysyłać do sterownika. A sieć wie co się dzieje w kontekście innych stacji obok i sama decyduje czy nie przełączyć w końcu jakiegoś terminala na inną stację bazową. Np. jestem bliżej i mam lepszy zasięg (dB) z jakiejś stacji, ale nie ma tam zasobów to sieć mnie przerzuca (**handover**) do innej stacji bez wiedzy terminala.
+
+Czyli sieć robi handovery i to się nazywa **centralny arbitraż zasobów**. Bo np. w sieciach pakietowych, terminal może sam zainicjować handover. W pakietówce opóźnienia 0.5 sekudny są spoko, ale w głosówce już nie. A nasz sieć ma mieć niezawodność 99.9%
+
+<img src="img/25.png" style="zoom:75%;" />
+
+### Mobilność nomadyczna
+
+<img src="img/26.png" style="zoom:75%;" />
+
+Załóżmy, że klienci sobie biegają, komórki są niezbyt duże i teraz mamy ich przepinać między komórkami, bo chcemy ich tak precyzyjnie mieć. (Cały czas nawet jak ktoś nie gada, to żeby go non-stop mieć). No i wtedy tak. Ktoś się porusza i zawsze jak zasięg jest lepszy w jakimś miejscu to przełączamy komórkę. Za każdym razem np. Ileż to tej sygnalizacji by było walone na darmo.
+
+> To tak jakby mam pilnowała dziecka w piaskownicy każąć mu mówić co chwila przy którym kamyku on jest.
+>
+> To bez sensu. Chodzi o to, czy on jest w tej piaskownicy czy już w innej, wtedy groźnie. 
+
+Obszary przywołań to są nasze piaskownice i póki dziecko chodzi w niej po kamykach to jest git. Ale jak przejdzie do innego, to chcemy od niego to usłuszeć. I to jest właśnie **nomadyzm** obszary przywołań wysyłają  info (parametry, nazwy, co umie itd.), żeby terminal wiedział gdzie jest, dostaje od obszaru liste stacji bazowych i pamięta. I nagle terminal nie widzi (słaby zasięg) żadnej stacji z listy, wtedy mówi "o kurcze przeszedłem stację bazową" muszę się przerejestrować. Odbiera od sieci nowy obszar i mówi do niej "teraz jestem tutaj, jak coś do mnie to tu szukajcie".  
+
+> Jak dużo komórek to obszar, jak szybko się przełącza, jak często terminal dostaje info to wszystki sobie wylicza operator i on to wie na podstawie pomiarów, statystyk itp.  
+>
+> Operator robi kompromis, żeby sygnalizacji nie było za dużo, ale żeby też było ez znaleźć klienta, gdy przychodzi do niego połączenie.
+
+Jak ktoś dzwoni do klienta, to sieć wie, w którym jest obszarze i wtedy okólnik z każdej stacji bazowej (broadcast) jest tam wysyłany  "ej, gościu ktoś do Ciebie, zgłoś się". I terminal wtedy odpowiada na tej, na której ma najlepszą moc. I terminal mówi do niej "dajcie mi kanał sygnalizacyjny, bo zdaje się to o mnie chodzi".
+
+W mobilności twardej mamy zestawiony kanał i jego trzeba błyskawicznie przełączać przy poruszaniu się, żeby ani bit nie uciekł. I to jest realizowane wedługo paradygmatu *make before break*, póki terminal się nie przełączy do nowego zarezerwowanego dla niego zasobu w innej stacji bazowej, to cały czas korzysta z tej starej.
+
+## Usługi końcowe
+
+Usługi końcowe to były
+
+- rozmówne
+- wywiedzione z rozmównych
+  - np. fax
+
+Usługą z poziomu użytkownika była **Transparentność usługi względem mobilności**
+A jej realizacją **zmiany wymuszone mobilnością** ( w tym *roamingiem*)
+
+<img src="img/28.png" style="zoom:75%;" />
+
+SSP jak user zaczynał być mobilny sygnalizowały to SCP, które były warstwą sterowania i jak kazały mu się przełączyć, to SSP wysyłał do STP a tamten do odpowiednigo SSP wiadomość, że zaraz tu się dołączymy. No i następny SSP sygnalizował znowy do STP, że następny węzeł to kolejny SSP i tak aż do SSP, z którem połączony jest user, do którego dzwonimy. Czyli widzimy już tu rozdzielenie płaszczyzny sterowania od danych.
+
+## Standaryzacja GSM
+
+GSM standaryzwało szereg ciał. Na początku GSM - ETSI, potem 3GPP się z tego wykrystalizowało od czasu R99 i do dzisiaj sprawuje piecze nad tym. Ważny dla GSM system sygnalizacji SS7 standaryzuje głównie ITU-T. Dodatkowo dla GSM z transportem IP następujące instytucje biorą udział:
+
+- IETF - stos SIGTRAN
+- ITU-T - protokół sterowanie zgłoszeniami BICC
+- IETF/ITU-T - Megaco/H.248 (protokół sterowania bramami medialnymi)
+
+## Punkt wyjścia dla GSM - PSTN, ISDN i SS7
+
+<img src="img/29.png" style="zoom:75%;" />
+
+To są dwa rysunki dla sieci PSTN/ISDN/SS7
+
+<img src="img/30.png" style="zoom:75%;" />
+
+
+
+Mamy sieć stałą (między CA/MSC a drugim CA/MSC) i mamy dostępy radio do niej (obszar pomarańczowy)). W sieci komórkowej mamy zmian obszarów pomarańczowych. 
+
+Więc w GSM:
+
+![](img/31.png)
+
+Więc w GSM zmieniono tylko dół (czerwona pętla), bo zmieniło się medium transmisyjne (drut na radiowe fale). W sieci stałej to się wtykamy kablem i jest, a tu trzeba zrobić radiowy dostęp do drutu.
+
+# B1C1 Architektura  
+
+![](img/20.png)
+
+Mamy część radiową **BSS** - **Base Station Subsystem** (teraz to się RAN nazywa w LTE i GeRAN w UMTS) i sieć stała(kablowa), która się nazywa **NSS - Network SubSystem** (w GSM i GPRS, a w wyższych standardach CORE Network, a w 5G "5G Core").  
+
+Część radiowa to zrobienie medium transmisyjnego, a cześć stała to pilnowanie tego medium i doniesieniem usług z perwspektywy klienta na styk sieci komórkowej, po to zeby ruch mógł wyjść "w świat". No bo sieć komórkowa robi dostęp do siecie publicznej, czy to Internet czy rozmówna publiczna. 
+
+NSS robi autentykacje, uwierzytelnienie.
+
+! Terminal u Użytkownik to są dwie różne rzeczy. Czym innym jest terminal, a czym innym SIM i człowiek. Mogę przełożyć SIM do innego terminala i still będzie działać. 
+
+Dodatkowo sieć stała zapewnia dostępność usług w wymiarze ogólnoświatowym. Jak jadę do Francji, to chciałbym mieć roaming (tego nie zrobi lokalna sieć radiowa, to trzeba poziom wyżej, czyli sieć stała to robi)
+
+> Jak się do mnie dzwoni z Chin a jestem we Francji, no to połączenie idzie do mojej sieci macierzystej, czyli do Polski, no bo skąd sieć Chińska ma wiedzieć, że we Francji jestem.  Dopiero mój operator w Polsce ma bazę danych z informacją, gdzie ja jestem i wtedy zależnie od technologii jakoś tam do tego połączenia ze mną dochodzi.
+
+# B1C2 Podsystem Sieciowy NSS
+
+## Elementy i Styki
+
+![](img/32.png)
+
+W PSTN były centrale, no to my też sobie wymyślimy jakieś.... ->:
+
+**MSC - Mobile Switching Center** - centrum komutacyjne dla usług mobilnych, które jest taką upgradewaną centralą ISDN połaczeń głosowych. Upgrade polega np. na realizacji handoverów.
+
+**HLR - Home Location Register** - rejestr macierzysty, rejestr gdzie na stałe są trzymane wszystkie dane o abonencie (nie personalne tylko te sieciowe - id karty, dane o sim'ie, klucze do szyfrowania, bieżąca lokalizacja z dokładnościa do obszaru MSC, gdzie on jest. Cokolwiek ja chce jako klient, to najpierw zawsze jest weryfikacja w HLR, czy user ma dostęp do usługi.
+
+**VLR - Visitor Location Register** - rejestr lokalny, hierarchicznie niżej niż HLR. 
+
+> np. Orange w jeden centralny HLR w Wawie. A ja jestem we Wrocku, tam już inne MSC funkcjonuje i z tamty MSC jest skojarzone lokalne VLR i w tym VLR jest lokalne info o mnie gdzie jestem z dokładnościa do obszaru przywołań, której HLR już nie widzi. Ale HRL wie, do którego VLR uderzać, gdyby trzeba było mnie znaleźć.
+>
+> Jak ktoś z centrali G-MSC chce do mnie, to zagląda do HLR i kieruje się już do MSC skojarzonym z wpisanym tam VLR
+
+**AuC - Authentication Center** - tu są klucze uwierzytelniające klientów.
+
+**EIR - Equipment Identity Register** - rejestr terminali. Nie wszystkich, ale tych które są jakoś specjalne, np. kradziony jest na zastrzeżonej liście albo z jakimś innym statusem i na tej podstawie pewne rzeczy można z nim zrobić a pewnych nie. Nie z Sim'em tylko z terminalem. Generalnie to żeby kradzione wrzucać na black list.Sieć sprawdza czy jest kradziony i jak jest to żadnej usługi nie wykona.
+
+**G-MSC - Gateway MSC** - taki MSC na brzegu z sieciami innymi niż ta operatorska (albo publiczna albo operatorska innego operatora (roaming))
+
+
+
+> I taki schemat zachował się w kolejnych standardach. Jak rozumiemy to, to łatwiej nam ogarnąć te nowe G. Zmiany są głównie niskopoziomowe w radiu, bo inaczej się zasobami zarządza (inne częstotliwości, modulacje itp.) oraz sama pakietówka dużo zmian zrobiła.
+
