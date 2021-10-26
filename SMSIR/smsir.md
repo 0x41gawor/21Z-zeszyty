@@ -351,6 +351,16 @@ A jej realizacją **zmiany wymuszone mobilnością** ( w tym *roamingiem*)
 
 SSP jak user zaczynał być mobilny sygnalizowały to SCP, które były warstwą sterowania i jak kazały mu się przełączyć, to SSP wysyłał do STP a tamten do odpowiednigo SSP wiadomość, że zaraz tu się dołączymy. No i następny SSP sygnalizował znowy do STP, że następny węzeł to kolejny SSP i tak aż do SSP, z którem połączony jest user, do którego dzwonimy. Czyli widzimy już tu rozdzielenie płaszczyzny sterowania od danych.
 
+***
+
+Chcemy, żeby sieć była **transparentna** dla usługi. Co nas obchodzi czy tam jest jakaś mobilność czy nie, dostęp radiowy czy jakiś inny).
+
+> Czyli, że user ma widzieć usługę tak samo bez względu na to czy korzysta z niej z urządzenia stacjonarnego czy mobilnego, czy korzysta z kabla czy z fal radiowych.
+
+ **Więc trzeba zapewnić wsparcie dla transparentności**
+
+> I to się nie da zrobić, bo każda sieć na świecie musiałaby mieć ten sam profil usługowy (zestaw usług) co moja sieć macierzysta, a wiadomo nie wszędzie na świecie jest tak samo. Znaczy takie podstawy jak rozmowy to i tak są wszędzie, ale jakieś bardziej pro rzeczy już nie, więc profil mój macierzysty nie wszędzie był honorwany, często gdzieniegdzie był okrojony.
+
 ## Standaryzacja GSM
 
 GSM standaryzwało szereg ciał. Na początku GSM - ETSI, potem 3GPP się z tego wykrystalizowało od czasu R99 i do dzisiaj sprawuje piecze nad tym. Ważny dla GSM system sygnalizacji SS7 standaryzuje głównie ITU-T. Dodatkowo dla GSM z transportem IP następujące instytucje biorą udział:
@@ -377,49 +387,7 @@ Więc w GSM:
 
 Więc w GSM zmieniono tylko dół (czerwona pętla), bo zmieniło się medium transmisyjne (drut na radiowe fale). W sieci stałej to się wtykamy kablem i jest, a tu trzeba zrobić radiowy dostęp do drutu.
 
-# B1C1 GSM - Architektura  
-
-![](img/20.png)
-
-Mamy część radiową **BSS** - **Base Station Subsystem** (teraz to się RAN nazywa w LTE i GeRAN w UMTS) i sieć stała(kablowa), która się nazywa **NSS - Network SubSystem** (w GSM i GPRS, a w wyższych standardach CORE Network, a w 5G "5G Core").  
-
-Część radiowa to zrobienie medium transmisyjnego, a cześć stała to pilnowanie tego medium i doniesieniem usług z perwspektywy klienta na styk sieci komórkowej, po to zeby ruch mógł wyjść "w świat". No bo sieć komórkowa robi dostęp do siecie publicznej, czy to Internet czy rozmówna publiczna. 
-
-NSS robi autentykacje, uwierzytelnienie.
-
-! Terminal u Użytkownik to są dwie różne rzeczy. Czym innym jest terminal, a czym innym SIM i człowiek. Mogę przełożyć SIM do innego terminala i still będzie działać. 
-
-Dodatkowo sieć stała zapewnia dostępność usług w wymiarze ogólnoświatowym. Jak jadę do Francji, to chciałbym mieć roaming (tego nie zrobi lokalna sieć radiowa, to trzeba poziom wyżej, czyli sieć stała to robi)
-
-> Jak się do mnie dzwoni z Chin a jestem we Francji, no to połączenie idzie do mojej sieci macierzystej, czyli do Polski, no bo skąd sieć Chińska ma wiedzieć, że we Francji jestem.  Dopiero mój operator w Polsce ma bazę danych z informacją, gdzie ja jestem i wtedy zależnie od technologii jakoś tam do tego połączenia ze mną dochodzi.
-
-# B1C2 GSM -  Podsystem Sieciowy NSS
-
-## Elementy i Styki
-
-![](img/32.png)
-
-W PSTN były centrale, no to my też sobie wymyślimy jakieś.... ->:
-
-**MSC - Mobile Switching Center** - centrum komutacyjne dla usług mobilnych, które jest taką upgradowaną centralą ISDN połaczeń głosowych. Upgrade polega np. na realizacji handoverów.
-
-**HLR - Home Location Register** - rejestr macierzysty, rejestr gdzie na stałe są trzymane wszystkie dane o abonencie (nie personalne tylko te sieciowe - id karty, dane o sim'ie, klucze do szyfrowania, bieżąca lokalizacja z dokładnościa do obszaru MSC, gdzie on jest. Cokolwiek ja chce jako klient, to najpierw zawsze jest weryfikacja w HLR, czy user ma dostęp do usługi.
-
-**VLR - Visitor Location Register** - rejestr lokalny, hierarchicznie niżej niż HLR. 
-
-> np. Orange w jeden centralny HLR w Wawie. A ja jestem we Wrocku, tam już inne MSC funkcjonuje i z tamtym MSC jest skojarzone lokalne VLR i w tym VLR jest lokalne info o mnie gdzie jestem z dokładnościa do obszaru przywołań, której HLR już nie widzi. Ale HRL wie, do którego VLR uderzać, gdyby trzeba było mnie znaleźć.
->
-> Jak ktoś z centrali G-MSC chce do mnie, to zagląda do HLR i kieruje się już do MSC skojarzonym z wpisanym tam VLR
-
-**AuC - Authentication Center** - tu są klucze uwierzytelniające klientów.
-
-**EIR - Equipment Identity Register** - rejestr terminali. Nie wszystkich, ale tych które są jakoś specjalne, np. kradziony jest na zastrzeżonej liście albo z jakimś innym statusem i na tej podstawie pewne rzeczy można z nim zrobić a pewnych nie. Nie z Sim'em tylko z terminalem. Generalnie to żeby kradzione wrzucać na black list.Sieć sprawdza czy jest kradziony i jak jest to żadnej usługi nie wykona.
-
-**G-MSC - Gateway MSC** - taki MSC na brzegu z sieciami innymi niż ta operatorska (albo publiczna albo operatorska innego operatora (roaming))
-
-> I taki schemat zachował się w kolejnych standardach. Jak rozumiemy to, to łatwiej nam ogarnąć te nowe G. Zmiany są głównie niskopoziomowe w radiu, bo inaczej się zasobami zarządza (inne częstotliwości, modulacje itp.) oraz sama pakietówka dużo zmian zrobiła.
-
-## Wstawka o sygnalizacji
+ Wstawka o sygnalizacji
 
 ### Sieć ISDN
 
@@ -528,4 +496,323 @@ Tak wygląda to w ISDN i teraz chodzi o to, żeby jak najwięcej z tych pomysł�
 ![](img/36.png)
 
 "Data Plane" jest nazywany też "User Plane".
+
+## Signalling System no. 7 (SS7)
+
+Pojawia się pytanie jak system ISDN należy zmienić, jeśli chcemy opatrzeć go w mobilność. 
+
+Więc w jakich obszarach pojawiły się zmiany?
+
+![](img/37.png)
+
+### Zmiany w usługach inteligentnych
+
+**SCP - Service Control Point** - punkt sterowania usługami, który jest serwerem (dostaje zapytania co robić ze zgłoszeniami o usługę i odpowiada)
+
+**SSP - Service Switching Point** - podrasowane centrale, które umieją takie zapytanie "co zrobić z danym zgłoszeniem, które jest w danej fazie z takimi paramsami" wysłać do SCP.
+
+> SCP może odpowiedzieć np. "obsługuj to zgłoszenie jakby nic się nie stało" lub "obsługuj to zgłoszenie, ale zmień nr docelowy na taki jaki ja Ci tu podstawiam"
+
+SCP służyła do sygnalizacji takich bardziej zaawansowanych usług jak przekierowanie numeró itp. natomiast w sieci GSM przyjęła ona formę takiej platformy **CAMEL - Customized Applications for Mobile networks Enhanced Logic**, która służyła wsparciu usług rozmównych i innych z uwzględnieniem roamingu abonentów (bo trzeba obiecane userowi usługi realizować też gdy jest za granicą). CAMEL działa tak, żeby jakiś rekord usługowy usera przewędrował z sieci macierzystej usera do miejsca, gdzie on jest za granicą.
+
+## Co doszło w 2G do ISDN/SS7
+
+Patrząc od dołu - doszło łącze radiowe z zarządzanym dostępem do zasobów, obsługą różnych apsketów mobliności i realizacją nowych usług końcowych (użytkowych) np. SMS.
+
+<img src="img/38.png" style="zoom:75%;" />
+
+Z punktu widzenia sterowania zgłoszeniami nic nowego się nie dzieje. (ofc wprowadzenie SMS, ale to korzysta tak jak z kanału rozmównego i tyle). 
+
+Dopiero w warstwach niżej zaczyna się coś dziać, no bo trzeba zamiast druta zrobić fale radiowe.
+
+Wcześniej (w ISND) Call Control (protokół DSS1) chodził bezpośrednio na data linku a to na jakimś fizycznym łączu. Teraz sprawa się komplikuje i sporo doszło ze względu na dostęp radiowy i mobilność w niższych warstwach. 
+
+> Są to dość trudne aspekty i sprzężone ze sobą dają dość skomplikowane rozwiązania (i tak ogólnie jest, że pierwsze podejście do problemu nie zawsze jest najprostsze, z czasem ludzie lepiej go rozumieją i upraszaczają sieć (arch. i protokoły), ale wraz z postępem G dochodzą nowe wymagania na usługi, więc to nie jest tak, że każde kolejne G jest coraz prostsze ogólnie jest, ale są nowe usługi itp i to robi systemy bardziej złożonymi).
+
+# B1C1 GSM - Architektura  
+
+![](img/20.png)
+
+Mamy część radiową **BSS** - **Base Station Subsystem** (teraz to się RAN nazywa w LTE i GeRAN w UMTS) i sieć stała(kablowa), która się nazywa **NSS - Network SubSystem** (w GSM i GPRS, a w wyższych standardach CORE Network, a w 5G "5G Core").  
+
+Część radiowa to zrobienie medium transmisyjnego, a cześć stała to pilnowanie tego medium i doniesieniem usług z perwspektywy klienta na styk sieci komórkowej, po to zeby ruch mógł wyjść "w świat". No bo sieć komórkowa robi dostęp do siecie publicznej, czy to Internet czy rozmówna publiczna. 
+
+NSS robi autentykacje, uwierzytelnienie.
+
+! Terminal u Użytkownik to są dwie różne rzeczy. Czym innym jest terminal, a czym innym SIM i człowiek. Mogę przełożyć SIM do innego terminala i still będzie działać. 
+
+Dodatkowo sieć stała zapewnia dostępność usług w wymiarze ogólnoświatowym. Jak jadę do Francji, to chciałbym mieć roaming (tego nie zrobi lokalna sieć radiowa, to trzeba poziom wyżej, czyli sieć stała to robi)
+
+> Jak się do mnie dzwoni z Chin a jestem we Francji, no to połączenie idzie do mojej sieci macierzystej, czyli do Polski, no bo skąd sieć Chińska ma wiedzieć, że we Francji jestem.  Dopiero mój operator w Polsce ma bazę danych z informacją, gdzie ja jestem i wtedy zależnie od technologii jakoś tam do tego połączenia ze mną dochodzi.
+
+# B1C2 GSM -  Podsystem Sieciowy NSS
+
+## Elementy i Styki
+
+![](img/32.png)
+
+W PSTN były centrale, no to my też sobie wymyślimy jakieś.... ->:
+
+**MSC - Mobile Switching Center** - centrum komutacyjne dla usług mobilnych, które jest taką upgradowaną centralą ISDN połaczeń głosowych. Upgrade polega np. na realizacji handoverów.
+
+**HLR - Home Location Register** - rejestr macierzysty, rejestr gdzie na stałe są trzymane wszystkie dane o abonencie (nie personalne tylko te sieciowe - id karty, dane o sim'ie, klucze do szyfrowania, bieżąca lokalizacja z dokładnościa do obszaru MSC, gdzie on jest. Cokolwiek ja chce jako klient, to najpierw zawsze jest weryfikacja w HLR, czy user ma dostęp do usługi.
+
+**VLR - Visitor Location Register** - rejestr lokalny, hierarchicznie niżej niż HLR. 
+
+> np. Orange w jeden centralny HLR w Wawie. A ja jestem we Wrocku, tam już inne MSC funkcjonuje i z tamtym MSC jest skojarzone lokalne VLR i w tym VLR jest lokalne info o mnie gdzie jestem z dokładnościa do obszaru przywołań, której HLR już nie widzi. Ale HRL wie, do którego VLR uderzać, gdyby trzeba było mnie znaleźć.
+>
+> Jak ktoś z centrali G-MSC chce do mnie, to zagląda do HLR i kieruje się już do MSC skojarzonym z wpisanym tam VLR
+
+VLR to informacje o wsystki abonentach, którzy akurat wpadli w obszar obłsugowy danego MSC. W tym sensie wpadli, ze znajdują się w podsystemach radiowych, które są dopięte do tego MSC. Jeśli klient przemieści się w obszar innego MSC, to odpowiedni VLR wysyła do tego drugiego VLR całe jego info.
+
+**AuC - Authentication Center** - tu są klucze uwierzytelniające klientów.
+
+**EIR - Equipment Identity Register** - rejestr terminali. Nie wszystkich, ale tych które są jakoś specjalne, np. kradziony jest na zastrzeżonej liście albo z jakimś innym statusem i na tej podstawie pewne rzeczy można z nim zrobić a pewnych nie. Nie z Sim'em tylko z terminalem. Generalnie to żeby kradzione wrzucać na black list.Sieć sprawdza czy jest kradziony i jak jest to żadnej usługi nie wykona.
+
+**G-MSC - Gateway MSC** - taki MSC na brzegu z sieciami innymi niż ta operatorska (albo publiczna albo operatorska innego operatora (roaming))
+
+> I taki schemat zachował się w kolejnych standardach. Jak rozumiemy to, to łatwiej nam ogarnąć te nowe G. Zmiany są głównie niskopoziomowe w radiu, bo inaczej się zasobami zarządza (inne częstotliwości, modulacje itp.) oraz sama pakietówka dużo zmian zrobiła.
+
+## Jak przebiega połączenie
+
+Spójrzmy jeszcze raz na ten rysunek
+
+![](img/39.png)
+
+**Um** - urządzenie mobilne.
+
+1. Um najpierw próbuje zarezerwować sobie kanał syngalizacyjny między nim a MSC.
+2. Następuje CAC (czyli komunikacja z HLR) jak wszystko ok, to międz Um a MSC jest kanał sygnalizacyjny (protokół DSS1). Tu jest CAC, ale też ustalenie szyfrowania dla danej rozmowy.
+3. Między Um a MSC powstaje kanał rozmówny.
+4. Teraz MSC zestawia połączenie przez sieć aż do ostatniego MSC (tego gdzie jest drugie Um)
+5. Teraz podobne procedury CAC (nie takie same lecz symetryczne) jak w 2. są wykonywane między dla Um2
+6. Gdy 5. OK, to zestawiamy kanały między MSC a Um2
+
+! Note that: krok 2. i 5. to abstrakcja, bo HLR jest przecież hierarhicznie rozproszone jako VLR.
+
+## Elementy
+
+### MSC
+
+**Mobile Switching Center** - centrala abonencka sieci GSM.
+
+- Ma swój obszar obsługowy ograniczony zbiorem przypisanych BSS (Base Station Subsystem) stacji bazowych. Jedna BSS podle zawsze jednemu MSC.
+
+- Użytkownicy pozostający w zasięgu MSC (podpięci do jednego z jego BSS) są zarejestrowani w VLR związanym z danym MSC
+
+**Główne funkcje**
+
+- Na poziomie usług
+
+  - Obsługa wywołań (gdy ktoś do mnie dzwoni, lub ja do kogoś - usługi głosowe (w tym też przekierowania itp.)
+  - Przekazywanie wiadomości SMS
+
+- Zarządzanie moblinością (Mobility Management)
+
+  - uwierzytelnienie abonentów podcas inicjonowania procedur sygnalizacyjnych (krok 2. z rodziału wyżej) we współpracy z innymi urządzeniami
+  - obsługa rejestracji terminala (po jego włączeniu) w sieci i obsługa wyrejestrowania (ofc znowu we współpracy z innymi urządzeniami)
+    - zanim chipset wyłączy prąd u siebie to powie sieci "elo, ja znikam"
+  - udział w aktualizacji położenia (location update)
+    - też ofc nie samo, ale to MSC rozdaje tu karty
+
+- Zarządzanie zasobami radiowymi
+
+  - > MSC jest dość głęboko w sieci. Pomiędzy terminalem a MSC jest cały podsystem radiowy przecież.
+
+  - więc -> wysokopoziomowe sterowanie zasobami w seici radiowej
+
+    - np. polecenie przydzielenia kanału sygnalizacyjnego MS
+      - terminal się zgłasza i podstawowe decyzje podejmuje MSC (nie zajmuje się wszystkimi detalami dostępu radiowego )
+    - np. polecenie przydzielenia kanału rozmównego MS po poprwanym CAC (moment między krokami 2. i 3.)
+      - MSC nie musi wskazać, który dokładnie na jakiej częstotliwości (bo tym zajmuje się sterownik częsci radiowej), ale decyzja czy przynać czy nie
+
+  - sterowanie przełączeniem połączenia (**handover**)
+
+    - ale nie na każdym poziomie ofc (zależy jak bardzo ten handover jest głęboki) 
+      - intra-MSC
+        - czyli terminal przemieszcza się w ramach jednego MSC, ale pomiędzy sąsiednimi BSC - taki handover musi explicite wykonac MSC
+      - inter-MSC 
+        - tu biorą udział nawet dwa MSC! Te między którymi terminal się przemieścił.
+
+- Biling połączeń
+
+### HRL 
+
+**Home Location Register** - baza danych o abonentach - cała informacja o terminalu, jego uprawnienia itp.
+
+Na sieć operatorską jest co najmniej jeden rejestr HLR/AuC
+
+W tej bazie danych każdy abonent ma następujące wpisy:
+
+- **MSISDN - Mobile Subscriber ISDN Number**
+
+  - zwykły numer abonencki, który ja daje kolegom
+    - jego format to CC + NDC + SN
+      - **CC** - Country Code, **NDC** - National Destination Code (kod sieci operatora), **SN** - Subsriber Number
+  - jest on publiczny, możliwy do zmiany
+  - inny niż numer sieciowy IMSI (ale podony z wyglądu)
+
+- **IMSI - Internaional Mobile Subscriber Identity**
+
+  - międzynarowody numer abonenta 
+  - max 15 cyfr
+  - unkiatowy globalnie na całym świecie
+  - przypisany na sztywno do karty SIM, karta SIM nigdy innego nie będzie miała
+  - jest możliwie super tajny (chyba, że ktoś specjalnie sobie jakimś urządzeniem karte SIM przejrzy)
+  - IMSI jest wykorzystywany przez protokoły sygnalizacyjne, a MSISDN to tylko taki ruting globalny
+  - format:
+    - MCC + MNC + MSIN
+      - **MCC** - Mobile Country Code (3cyfry), **MNC** - Mobile Network Code (2-3cyfry), **MSIN** - Mobile Subscriber Identification Number (10cyfr) - unikatowy w sieci danego operatora
+
+- **TMSI  - Temporary Mobile Subscriber Identity**
+
+  - Chwilowy/ przejściowy identyfikator subskrybenta ruchomego
+  - ten występuje w sygnalizacji bardzo często (IMSI występuje tak rzadko jak tylko można), zwłaszcza na styku radiowym to ten jest wykorzystywany IMSI tylko gdy nie da się inaczej.
+  - on jest losowany, możesz być zmieniany co chwilę przy każdej kolejnej sekwencji sygnalizacyjnej. Chodzi o to, że jak ktoś podsłucha ten numer to co mu z tego jak za minutę czy dwie on się zmieni 
+  - jest zarządzany przez akutalny VLR
+
+- **MSRN - **Mobile Subscriber Roaming Number
+
+  - >  żeby to wyjaśnić spójrzmy na strukturę adresu IP. On ma maski, tak, ale po co? żeby adresy były hierarchinczne, ale po co? Żeby tablice routingu były w miarę małe  (mieszczą się w zakresach ogarnialnych przez urządzenia). Jakbyśmy mieli płaski adressing (tak jak w ETH), to ile adresów, tyle wpisów w tablicy (5 mld telefonów to 5mld wpisów), to jest nie do ogarnięcia.
+
+  - I to jest właśnie numer (znowu o podonym wyglądzie do IMSI), który służy do hierarchicznego rutingu w sieci ISDN.
+
+    - Jak to działa
+
+      - > Jak sieć dostanie zgłoszenie to po numerze MSISDN kieruje je do sieci macierzystej tego numeru i G-MSC odpytuje HLR tego numeru "weź mi podaj TMSI". Wtedy HLR po `aktualnym VLR`  odptyje o TMSI i odsyła to do G-MSC. Wtedy G-MSC rutuje połączenie pod numer MSRN. To jest chwilowy numer abonenta
+        >
+        > Czyli nie rutujemy po MSISDN (to jest jak FQDN - Full Quallified Domain Name w internecie, po nim się nie rutuje tylko za pomocą DNS zamienia na adres IP), tylko po MSRN.
+
+      - Po MSRN dochodzimy do MSC, do którego jest połączenie przychodzące 
+
+- **Aktualny VLR** - VLR powiązany z MSC, w którym to obszarze usługowym jest user
+
+- **Lista usług** - lista usług dostępnych dla danego abonenta (te za które płaci i może ich oczekiwać)
+  - Są w tym usługi podstawowe (basic services):
+    - telefon
+    - SMS
+    - Fax
+  - Ale i dodatkowe (supplementary services)
+    - przekierowanie bezwarunkowe
+    - przekierowanie w przypadku zajętości
+    - call waiting
+    - call hold
+    - ...
+
+### AuC
+
+**Authentication Center** - Centrum uwierzytelnień.
+
+Chodzi o to, żeby szyfrować transmisję na styku radiowym jak tylko się da dla:
+
+- sygnalizacji
+- mowy i  SMS
+
+Jak uwierzytelnimy terminal to on sobie tam wylicza na podstawie pewnych algorytmów i kluczy swój klucz szyfrujący  i szyfruje transmisję. Sieć przeprowadza analogiczne, odpowiednie obliczenia i wie jakie są klucze szyfrujące i potrafią się dogadać szyfrując transmisję na styku radiowym 
+
+AuC przechowuje indywidualne klucze **Ki** dla abonentów
+
+- symetryczne - ten sam klucz Ki jest zapisany na karcie SIM (i żyją te klucze tylko tam)
+- Ki nigdy nie jest wymieniany, nie pojawia się w sieci
+
+Wszelki klucze do szyfrowania są wyliczane na podstawie kluczy Ki i jakiś zrandomizowanych wartości, które co chwila się zmieniają.
+
+Uwierzytelenie:
+
+- dla większości operacji wymaga się uwierzytelenienia karty SIM
+- np. zawsze przy zestawianiu kanału sygnalizacyjnego do sieic
+
+Szyfrowanie:
+
+- klucze Kc dla indywidualnych transmisji na styku radiowym są wywodzone z Ki oraz lakiś zrandomizowanych wartości (ma to krótki żywot i nawet zhackowanie klucza Kc daje mi dostęp tylko przez chwilę)
+
+<img src="img/40.png" style="zoom:100%;" />
+
+Ki jest na SIMIE i w AuC. 
+
+1. No i w początkowej fazie gdy termianl mówi do MSC, to wymeniany jest plain text (zero szyfrowania), ale tam korzystane jest z numerów TMSI, więc to info nie jest ważne dla hackerów. 
+2. Teraz MSC odwołuje się do Auc o odesłanie takie trojki liczb (**auth tiplets**), które potem posłużą do wdrożenia szyfrowania na styku radiowym.
+3. Auc wylicza auth trplests, czyli -  **{RAND, SRES, Kc}**. Czyli jakaś liczba losowa, SRES - wyliczona na podstawie Ki i liczby losowej i Kc - klucz Kc (bo BTS musi tego używać a jest za głupi, żeby sobie to wyliczyć)
+4. MSC wysyła do termiana *auth triplets*
+5. Terminal teraz wykonuje podobne obliczenia jak Auc i wysyła swoje obliczone SRES oznaczone jako SRES*
+6. Jeśli SRESy się zgadzają to jest git.
+7. BTS dostaje Kc i używa go do szyfrowania na styku radiowym.
+8. Terminal sam sobie liczy Kc
+
+### VLR
+
+**Visitor Location Register** - rejestr wizytantów
+
+Blok zawsze skojarzony z MSC relacją @OneToOne. Implementacyjnie jest to kawałek MSC (w tym sam węźle po prostu)
+
+- Przechowuje rekordy abonentów znajdujacych się aktualnie w obszarze obsługi danego MSC
+  - Rekordy są kopiami danych zapisanych w HLR
+    - ważne: dostępne usługi są wszędzie takie same (tj. jak w sieci macierzystej)
+    - Czyli są tu:
+      - numery: IMSI, MSISDN, TMSI*, MSRN*
+      - LA (**obszar przywołań - Location Area**) te piaskownice z wcześniej
+        - w VLR jest identyfikator LA
+      - klucz Kc
+
+*tak btw to TMSI i MSRN jest zarządzany przez VLR
+
+### EIR
+
+**Equipment Identity Register**
+
+> Chodzi o to, ze rodzielamy. Czym innym jest sprzęt(terminal) od karty SIM. Karta SIM może być ok, ale wsadzona do kradzionego terminala nie zadziała. Terminal może nie kradziony, ale zła karta SIM (nie uprawniona) nie zadziała.
+
+Rozdzielenie identyfikatora abonenta (SIM/IMSI) od identyfikatora terminala IMEI
+
+ **IMEI - International Mobile Equipment Identity**:
+
+- format: numer seryjny + typ terminala
+- unikalny światowo
+
+EIR to baza danych, która:
+
+- jest odpytywana za pomocą SS7/MAP
+- Zawiera listy
+  - **biała** - dozwolone w danej sieci TYPY terminali
+  - **czarna** - IMEI terminali niedozwolonych (kradzione lub zablokowane z innych powodów)
+  - **szara** - IMEI terminali, dla których dozwolone jest śledzenie lokalizacji
+
+Zapytania do EIR są dozwolone w dowolnych momentach podczas akutalizacji położenia (location update) i przy nawiązywaniu połączeń.
+
+## Usługa SMS
+
+Założona, że SMS to 160 oktetów, więc zastanowiono się czy potrzebny jest w ogóle zestawianie kanału, dojdzięto do wniosku, nie ma co tego prowadzić kanałem rozmównym i dlatego:
+
+SMS w sieci radiowej jest przekazywany kanałem sygnalizacyjnym, a nie kanałem rozmównym. W ISDN nie było SMS'ów.
+
+Więc SMS jest tak jakby usługą Call Control, ale tylko dlatego że przechodzi sygnalizacją.
+
+SMS zawiera:
+
+- nr MSISDN docelowego abonenta
+- adres właściwego **SMSC - SMS Center** odczytany z karty SIM
+  - dokładniej: nagłówek globalny SMSC wg SS7/SCCP
+- tekst wiadomości
+
+![](img/41.png)
+
+Struktura jest taka, że jest centrum SMSowe sieci macierzystej, czyli SMSC, które współpracuje z HLR, żeby wydobywać lokalizację terminala B
+
+## Protokoły sieci stałej
+
+### Protokoły w sieci stałej ISDN/PTSN/SS7 porównane z znanym dobrze stosem
+
+![](img/42.png)
+
+### Stos protokołów SS7 dla GSM + aspekty sterowania (CC, MM, RR)
+
+CC - **Call Controll**, MM - **Mobility Management**, RR - **Radio R..?**
+
+![](img/43.png)
+
+# B1C3 GSM - Podsystem radiowy BSS
+
+Tera będzie to:
+
+<img src="img/44.png" style="zoom:75%;" />
 
