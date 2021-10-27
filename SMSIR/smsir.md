@@ -336,6 +336,10 @@ Jak ktoś dzwoni do klienta, to sieć wie, w którym jest obszarze i wtedy okól
 
 W mobilności twardej mamy zestawiony kanał i jego trzeba błyskawicznie przełączać przy poruszaniu się, żeby ani bit nie uciekł. I to jest realizowane wedługo paradygmatu *make before break*, póki terminal się nie przełączy do nowego zarezerwowanego dla niego zasobu w innej stacji bazowej, to cały czas korzysta z tej starej.
 
+### Obszar przywołań
+
+Zbiór kilku komórek w których spodziewamy się danego abonenta. Chodzi o to, żeby sieć wiedziała od razu gdzie go szukać, a nie szukała go po całym świecie. Z drugiej strony jest to kilka komórek, żeby abonent nie musiał się co chwila przerejestrowywać.
+
 ## Usługi końcowe
 
 Usługi końcowe to były
@@ -806,7 +810,7 @@ Struktura jest taka, że jest centrum SMSowe sieci macierzystej, czyli SMSC, kt�
 
 ### Stos protokołów SS7 dla GSM + aspekty sterowania (CC, MM, RR)
 
-CC - **Call Controll**, MM - **Mobility Management**, RR - **Radio R..?**
+CC - **Call Controll**, MM - **Mobility Management**, RR - **Radio Resoruce Management**
 
 ![](img/43.png)
 
@@ -816,3 +820,363 @@ Tera będzie to:
 
 <img src="img/44.png" style="zoom:75%;" />
 
+## Agenda omówienia BSS
+
+<img src="img/45.png" style="zoom:75%;" />
+
+## Ogólna organizacja podsystemu
+
+### BSS - widok ogólny
+
+Skupmy się interfejsie radiowym tzw. **Air-interface**
+
+- Spróbujmy zidentyfikować jego główne zadania
+
+![](img/46.png)
+
+ ### Jak można zorganizować łączaność w sieci mobilnej? - pytania naprowadzające
+
+Komórki są po to, żeby dobrze zarządzać pasmem radiowym! To pasmo radiowe my dzielimy sobie na "fragmenty" tzw. **nośne** lub **kanały**. W sieci GSM te kanały mają szerokość 200kHz
+
+Skoro mamy podział na "**komórki**", to jak zwielokrotnić i dzielić między nie pasmo radiowe, jakimi "kwantami pasma" operujemy?
+
+- **PYT:** ile potrzeba komórek, jak duży geograficznie obszar mogą one objąć, jak rozdzielić między nie dostępne pasmo radiowe?
+
+  - pytanie pomocnicze: na ilu użytkowników może wystarczyć kanał np. 200kHz (skoro GSM to "głos")
+
+    - > **Zróbmy obliczenia:**
+      >
+      > Efektywność modulacji w GSM była 1 do 1, czyli 1Hz przekładał się na 1 bit, więc taki kanał 200kHz ma przepływność 200kb/s.
+      >
+      > Przepływność kanału rozmówego (czyli dla jednego usera) jest rzędu kilku-kikunastu kb/s (takie były ówczesne kodeki). Przyjmijmy 10kb/s. W takim razie współbieżnie można prowadzić 20 rozmów.  
+      >
+      > Teraz jest pytanie jaka jest aktywność userów. W tamtych czasach przyjmowało się 50mili Erlangów*, 
+      >
+      > > *Erlang - jednostka natężenie ruchu telekomunikacyjnego. Dla danego systemu telekomunikacyjnego składającego się z 1 linii, i czasu obserwacji równego 1 godzinie (60 minut), jeśli linia ta zajęta jest cały czas przez pełną godzinę, to natężenie ruchu wynosi 1 erlang; odpowiednio, jeśli linia ta zajęta jest przez 30 minut, natężenie to wynosi 0,5 erlanga.
+      >
+      > Czyli, średnio user rozmawia przez 2/100 jego czasu, czyli 1/50
+      >
+      > Dlatego skoro możemy prowadzić 20 rozmów na raz, każdy poświęca na rozmowy statystycznie 1/50, to wychodzi nam, że możemy obłużyć **1000** abonentów jedną komórką.
+      >
+      > Ofc. to jest bardzo zgrubne obliczenie, typowe stacje w obszarach pośrednich (miasto-wieś) mają np. po 3 kanały, co by oznaczało, że są w stanie obsłużyć 3000 abonentów. W rzeczywistości nie - bo te 10kb/s to jest goły kodek, a przecież trzeba to zabezpieczyć, a efektywność ówczesnych zabezpieczeń to 50%, więc na 1bit kodek są 2bity przesłane, więc z 3000 spada nam do 1500 + trzeba zrobić jakieś rezerwy na sygnalizacje, więc ostatecznie wychodzi nieco mniej.
+
+- **ODP:** Komórki dzielimy na obszary geograficzne tak po mniej więcej 1000-1300 userów. Każda komórka dysponuje dedykowanymi jej kanałami **FDM - Frequency Division Multiplexing - multipleks z podziałem częstotliwości**. Czyli ogólnie mówimy, że:
+
+  *w sieci GSM, technika FDM służy zwielokrotnieniu w dostępie radiowym na poziomie sieci* - czyli zwykłe dzielenie się częstotliwością
+
+  
+
+- **PYT:** Jak zorganizować dwukierunkowość? (no bo przecież jak jest rozmowa, to mamy uplink i downlink)
+
+- **ODP:** Używany jest **FDD - Frequency Division Duplex**
+
+  - W nowszych systemach jest TDD - TIme Division Duplex
+
+    
+
+- **PYT:** Jak na tym kanale 200kHz, wymieszać rozmowy (w liczbie ok. 20) i inne usługi, oraz syganlizacje. Czyli jak wymieszać różne strumienie informacyjne w ramach wspólnego kanału częstotliwościowego?
+
+- **ODP:** Definiujemy następujące strumienie informacji:
+
+  - usługi (głos, SMS, fax)
+  - sygnalizacja zarządzania zasobami na styku
+  - sygnalizacja mobilności
+  - sygnalizacja poziomu usługowego (DSS1)
+
+  Dla każdego strumienia definiujemy adekwatną część kanału.
+
+
+
+- **PYT**: W jaki sposób zwielokrotnić (czyli dać dostęp wielu i go rozróżniać, słówko jest dlatego z*wielo*krotnić, bo nie jeden tylko wiele robimy) różne strumienie informacji?
+- **ODP:** można zrobić to na dwa sposoby FDM lub TDM
+  - W GSM używa się **TDM - Time Division Multiplexing**
+
+
+
+Czyli kanały (należące do komórek) odzielane są między sobą za pomocą FDM, a rózne strumienie w ramach jednego kanału za pomocą TDM.
+
+### Air-Interface
+
+Z poprzedniego rozdziału wiemy, że mamy podział na kanały 200kHz i że duplex (uplink, downlink) jest realizowany za pomocą FDM. Spójrzmy na rysunek poniżej pasmo dla systemu GSM900 (900, bo obszar częstotliwości dla uplink oscyluje wokół 900Mhz)
+
+![](img/47.png)
+
+Kanały rozmówne (te 200kHz) widzimy jako te garby (ofc ich jest więcej niż na rysunku), które są obok siebie wiadomo z jakimś marginesem, żeby nie było zakłóceń
+
+> btw. to też jest sztuka dla operatora rozmieścić max licznę kanałów (na wykupionym paśmie) bez zakłóceń między nimi.
+
+Mamy 124 nośne(inaczej kanały), ale to nie znaczy, że cały GSM mógł tylko tyle rozmów obsłużyć, po prostu komórki, które dostawały takie same pasma kanałów były daleko od siebie. To też jest zagadnienie do rozwiązania kombinatoryczne. Żeby pasma komórek sąsiednich nie nachodziły na siebie
+
+W miarę rozwoju systemu użyto większego zbioru pasm:
+
+<img src="img/48.png" style="zoom:60%;" />
+
+
+
+No więc mamy 124 nośne/kanały o szerokości 200kHz. I pytani jest jak to zorganizować, żeby mieć dostęp w domenie cyfrowej.
+
+Wyobraźmy sobie fragment pasma z trzema kanałami każdy 200kHz, które należą do jednej komórki. I dostęp do tych pasm ma max 8 userów naraz.
+
+> Czyli mamy komórkę, która ma takie 3 kanały i zakłada obsługę masymalnie 24 userów w jednym czasie
+
+![](img/49.png)
+
+**Podział nośnej (zasobu częstotliwościowego) )pomiędzy abonentów nie odbywa się w domenie częstotliwościowej tylko w domenie czasowej!**
+
+![](img/50.png)
+
+Produkuje się sygnał cyfrowy (strumień bitów), któremu nadaje się strukturę ramkową i w ramach tej struktury zaczynamy przyznawać terminalom odpowiednie fragmenty tej ramki, jakieś tam kawałeczki czasu. W ramach to których terminal może prowadzić transmisję, terminal prowadzi trasmisję w stronę sieci a na innych kawałeczkach sieć w stronę terminala.
+
+W GSM organizujemy szczeliny czasowe - każda o długości 577mikrosekundy. W te szczeliny wsadzane są pakiety tzw. **bursty** i te szczeliny organizujemy w takie ramki, które idą jedna za drugą i taka ramka trwa 5.615ms
+
+> Zwracamy uwagę na to, że to nie jest struktura sztywnych pakietów bitów, tylko to jest struktura abstakcyjna czasowa - tak sobie wyobrażamy miejsca w które termianl czy stacja bazowa (BSS) może wkładać swoje bity. Czyli to jest taka rama czasowa, która nas obowiązuje i w którą możemy wsadzać swoje informacje.
+
+Transmisja dla danego usera, to jest złożenie szczelin czasowych z kolejnych ramek. Na rysunku mamy zaznaczone szczeliny w kolejnych ramkach, które składają się dla transmisji usera 2, czyli na tzw. **time slot - kanalł fizyczny** o numerze 2.
+
+#### 2.1 Włączenie terminala moblinego
+
+Skoro już wiemy jak wygląda transmisja na poziomie fizycznym, to co musi nastąpić, żeby terminal podłączył się do sieci.
+
+1. Terminalowi włącza się zasilanie, on się budzi i nic nie wie. Może być tam gdzie był albo być w miejscu zupełnie nowym.
+2. Więc musi posłuchać co się dzieje na około. Czyli skanuje częstotliwości (bo zna nośne na których pracuje GSM).
+3. Wybiera silne stacje bazowe (dużo Wat) np. 10
+4. Próbuje się zsychronizować z tymi stacjami, żeby odczytać informacje, które nadają, żeby dowiedzieć się kim stacja jest, poznać ich własności
+   1. Zsynchronizować - umieć odczytać co ta stacja nadaje (stacje w kanałach rozsiewczych wysyłają informacje systemowe, które je opisują i terminal decyduje czy on chce się podłączyć do sieci, którą ta stacja reprezentuje)
+5. Gdy terminal pozna własności (operator, usługi itp.) każdej ze stacji, to jakiś algorytm z chipsetu wybiera jedną z nich.
+6. Terminal rejestruje się w danej stacji i jest w stanie spoczynku
+   1. W stanie spoczynku najlepiej, aby nie zajmował żadnych zasobów radiowych.
+7. Teraz mogą zadziać się dwie rzeczy
+
+- Terminal ma możliwość "pobudzenia" sieci (np. gdy chcemy zadzwonić / wysłać SMS)
+
+  - wywołuje sieć w celu zainicjowania procesu zajmowania zasobów "od zera", trzeba rozwiązywać konflikty z innymi userami
+
+    - > W wifi np. to jest losowane, ale w sieci globalnej mobilnej powodowałoby to słabe wykorzystanie pasma. Dlatego w GSM pasmem zarządza sieć w modelu scentralizowanym.
+
+  - niezbędna jest wymiana sygnlizacji usługowej po już częściowo np. zajętych zasobach sygnalizacyjnych
+
+  - wymagane jest przyznanie terminalowi zasobów rozmównych na transfer głosu
+
+- Sieć ma możliwość "pobudzenia" terminala (np. gdy ktoś do nas dzwoni / przyszedł SMS)
+
+  - wymagania analogiczne do tej co wyżej
+
+Opiszemy to później, na razie tylko mówimy jakie akcje są podejmowane.
+
+***
+
+Btw co widzi termianl w kroku 2.
+
+![](img/51.png)
+
+**Co dalej - na potrzeby obsługi mobilności?**
+
+- Sterowanie mocą i wyprzedzeniem transmisji terminala przez BSS
+  - Chcemy optymalizować moc sygnału u terminala i stacji bazowej. Jak za duża to marnujemy energię i pasmo, a jak za mało to błędy mogą być 
+  - wyprzedzeniem transmisji terminala, co to?
+    -  Chodzi o to, że już przy tak małych częstotliwościach odległość terminala od stacji bazowej ma znaczenie i pojawia się pytanie czy pakieciki wysłane przez terminal zmieszczą się w szczelinie czasowej spodziewanej po stronie stacji. Czyli trzeba ogarnąć, żeby się szczelinki czasowej nie rozkraczyły i pakiety nie pomieszały
+- "czytanie" pobliskich stacji bazowych i informowanie własnego BSS o nich na okolczności zmiany stacji bazowej (BSS - stacja bazowa)
+- obłsuga zmiany obszaru przywołań 
+  - mobilność podczas nieaktywności terminala 
+  - **handover** - mobilność podczas aktywności terminala
+
+***
+
+Stąd uogólniając radiowe zasoby transmisyjne:
+
+- służą celom obłsugi mobilności nomadycznej i twardej (czyli podczas rozmowy)-  tzw. handover (w 3GPP - **mobility management**)
+- służą celom usługowym ofc. czyli SMS, głos, fax, przekierowanie połączenia*
+- służą celom sygnalizacyjnym usług użytkowych (w 3GPP - **call management** (call controll))
+- same podczas realizacji 3 powyższych wymagają skoordynowanego zarządzania nimi ( w 3GPP - **radio resource management**)
+
+
+
+*przekierowanie połączenia, to jak szef ma zajęte i połączenie do niego są przekierowywane do jego sekretarki 
+
+#### Typy kanałów / Strumienie informacji
+
+Z racji, że wemy co mają zasoby radiowe robić, to moze sobie ustalić jakie są kanały logiczne.
+
+Te kanały możemy sobie podzielić na takie 3 podstawowe grupy:
+
+- rozgłoszeniowe (**broadcast channels - BCH**)
+- wpólne (**common channels - CCH**)
+- dedykowane (**dedicated control channels - DCCH**)
+
+Na każdym kanale jest komunikacja w celu realizacji jakiś zadań. Te wiadomości muszą przyjąć formę jakiegoś protokołu. Każdy z kanałów ma inne wymagania na przepływność kanał TCH np. 10kb/s, a taki PCH to tylko kilka szybkich wiadomości i elo.
+
+##### Kanały rozgłoszneniowe - BCH
+
+Czyli grupa kanałów, że terminal zorientował się co się dzieje wokół niego.
+
+|                Kanał logiczny                |                       Funkcje zadania                        |
+| :------------------------------------------: | :----------------------------------------------------------: |
+|   **FCCH** - Frequency Correcntion Channel   | **rozgłaszanie obecności** BTS (stacji bazowych) i wykrywanie BTS<br />- identyfikowanie istnienia BTS i nośnej ARF z info o BTS |
+|      **SCH** - Synchronisation Channel       | **synchronizacja terminala z wykrytymi stacjami**<br />- krok 4 z rodziału 2.1 |
+| **BCCH** - Broadcast Common Controll Channel | **informacja o stacjach bazowych**<br />- szczegółowy opis BTS/BSS niezbędny terminalowi do przeprowadzenia komunikacji |
+
+##### Kanały wspólne - CCH
+
+Terminal w stanie spoczyku tylko słucha, jak chce sam coś zadzownić to musi sieć poprosić o zasoby.
+
+|          Kanał logiczny          |                       Funkcje zadania                        |
+| :------------------------------: | :----------------------------------------------------------: |
+|     **PCH** - Paging Channel     | informowanie terminala o **konieczności podjęcia komunikacji**, gdy przyczna leży po stonie **sieci** (ktoś do nas dzwoni), a terminal jest w spoczynku i nie jeszcze przyznanych zasobów radiowych |
+| **RACH** - Random Access Channel | informowanie sieci przez terminal o **konieczności podjęcia komunikacji**, gdy przyczna leży po stonie **terminala** (my do kogoś dzwonimy), a terminal jest w spoczynku i nie jeszcze przyznanych zasobów radiowych |
+| **AGCH** - Access Grant Channel  | **info o przyznanym terminalowi kanale sygnalizacyjnym**<br />- wyodrębenienie zasobu sygnalizacyjnego na wyłączny użytek terminala, autoryzowane i koordynowane centralnie |
+
+Po otrzymaniu zasobów terminal z siecią komunikuje się za pomocą następnej grupy kanałów logicznych - kanały dedykowane
+
+##### Kanały dedykowane - DCCH
+
+|                  Kanał logiczny                  |                       Funkcje zadania                        |
+| :----------------------------------------------: | :----------------------------------------------------------: |
+| **SDCCH** - Standalone Dedicated Control Channel | właściwe procedury dotyczące **obłsugi zgłoszeń i mobilności**<br />- sygnalizacja wymagajacy wymiany szeregu wiadomości, tolerująca umiarkowane opóźnienia |
+|   **SACCH** - Slow Assocaited Control Channel    | wymiana informacji o jakości transmisji sąsiednich stacji i parametrów adaptacji transmisji (moc, wyprzedzenie)<br />- **kontrola jakości** podczas korzystania z kanałów dedykowanych<br />-SI w stanie aktywności |
+|   **FACCH** - Fast Assocaited Control Channel    | przełączenie BTS w trakcie trwania komunikacji (**handover**)<br />- wymóg: szybka reakcja, przełączenie niezauważalne dla usera |
+|            **TCH** - Traffic Channel             | strumienie głosowe lub strumienie danych userów<br />- **transfer danych głosowych** lub transmisji danych (poza SMS)<br />- ten co zajmuje nawięcej pasma<br />- to po to tak naprawdę to wszystko jest |
+
+> Jedna kanały są wiekszę jedne mniejsze. Z niektórych korzystamy krótko a nie które pochłaniają dużo szczelin czasowych. To ile miejsca w strumieniu szczelinowym przeznaczymy na kanały to zależy od tego jaki jest profil ruchu (ile jest sygnalizacji, ile rozmów), te parametry pływają (constant changes) i później zobaczymy, że kanały logiczne można reazlizować fizycznie na wiele sposobów w zależności ile danego kanału logicznego w tej chwili potrzeba. Ofc. nie ma dowolki, są jakieś wzorce ile co na co przyjmować itp.
+
+#### Kanały rozgłoszeniowych
+
+Reszta kanałów zobaczymy potem na wykładzie podczas omawiania sygnalizacji oraz na labkach.
+
+##### FCCH - Frequency Correction Channel
+
+W GSM transmisja fizyczna jest realizowana modulają **GMS-K (Gaussian Minimal Shift-Keying)**, która tym się cechuje, że w tym kanale przesyłane są same zera, symbolizowane przez czystą sinusoidę, na częstotliwości przesuniętej o 67.7kHz względem częstotliwości nośnej.
+
+W domenie czasowej mamy taki wzorzec, że co 4.6ms pojawia się przez 575us sinusoida o f=nośna + 67.7, co przekłada się na to, że terminal widzi taki peak w mocy sygnału 
+
+![](img/52.png)
+
+Jak ten peak jest stabilny (to jest analogowe, więc łatwo wykryć), to terminal odejmuje od tego 67.6kHz i jak wynik mieści się w szeregu nośnych jakie standard przewiduje, to wie że znalazł kanała FCCH i z niego będzie mógł odczytywać dalsze parametry tej stacji bazowej.
+
+No i terminal sprawdza sobie takie peaky i na tej podstawie łapie listę stacji bazowych. 
+
+##### SCH - Synchronization Channel
+
+Jak terminal znajdzie częstotliwość (FCCH-67.7kHz) to próbuje na tej częstotliwości na innym już kanale niż FCCH, otóz na SCH przeprowadzić tzw. synchronizację. Ten kanał już jest cyfrowy. Synchronizowanie na nim pozwala już terminalowi odróżniać te szczelinki.
+
+![](img/53.png)
+
+Terminal wie, że kanał FCCH jest na kratce 0, i że za ileś kratek znajdzie kanał SCH i tam dostanie informacje jaka jest struktura/numeracja tych ramek w takich strukturach wieloramkowych. 
+
+> Bo potem zobaczymy, że ten strumień jest organizowany nie tylko w takie ramki po 7 szczelin, ale też w wieloramki liczące 51 takich ramek, a te wieloramki w takie multiramki, które liczą już tam tysiące ramek. Dlatego, że transmije dla różnych kanałów są zdefiniowane już w scopie wieloramek. Czyli np. ramki nr od 10-22 to jakiś tam kanał na szczelinach wszystkich oprócz 0 i 2.
+>
+> Analogia: mamy godziny robocze, ale one składają się na tydzień roboczy, tygodnie robocze składają się na miesiące robocze itd. 
+> i teraz pewne zadania wykonujemy raz na dzień, inne raz na tydzień inne 2 razy w miesiącu itp.
+> (a pamiętamy, że kanały powstały w celu relizacji szczególnych zadań)
+>
+> więc musimy znać numeracje tych dni, tygodni, miesięcy w skali roku I OD TEGO JEST KANAŁ SCH
+>
+> 
+
+Zawiera on:
+
+- identyfikator BTS (BSIC - BTS Identity Code, info ważna dla L3) 
+- numer ramki (po to żeby się zsynchronizować z numeracją wieloramek)
+  - bitowa sekwencja trenująca (synchronizacja bitowa)
+
+W FCCH była info analogowa, tu już jest binarna.
+
+##### BCCH - Broadcast Common Control Channel
+
+>  Struktura wieloramki odzwierciedla rytm udostępnianych przez stację bazową informacji i w szczególności są tam informacje systemowe, które są rozsiewane na tzw. kanale broadcastowym
+> i w tym kanale są informacje niektóre rozsyłane w trybie tygodniowym, niektóre miesięcznym a inne rocznym
+> są to tak zwane **bloki informacyjne (System Information)**
+
+Inaczej ten kanał nazywamy **Beacon Channel**
+
+Ten kanał transmitowany jest zawsze na jednej nośnej należące dla danej komórki:
+
+- tej z najniższym numerem w danym BTS
+- tej samej gdzie FCCH i SCH
+- zawsze z max mocą
+- **ARFCN (Absolute Radio Frequency Channel Number)** zawierający BCCH nazywany jest beacon channel
+
+Kanał ten zawiera szereg informacji o stacji bazowej:
+
+- elemnty informacyjne (IE - Information Element) grupowane są w bloki SI (System Information)
+- najważniejsze bloki to 2, 3 i 4
+
+![](img/54.png)
+
+**Cell identity** - loka,nie unikatowy identyfikator komórki (Global CI = CI + LAI)
+
+**Location Area Id** - MCC + MNC + LAC
+
+**Channel Description** - opis struktury kanałów sterujących (żeby wiedzieć, gdzie je znajdować)
+
+**RACH Control Param** - info jak jest udostępniany, jak wygląda *Random Access Channel*, jak się do niego dostać (no bo to jest punkt wejściowy do usługi), jakie ma parametry itp.
+
+**Neighbor Cells Des** - opis sąsiednich komórek, pojawia się on w blokach często, bo jak user gada, to musimy mu mówić jakie komórki on powinien dookoła nasłuchiwać i przesyłać do stacji bazowej raporty o nich na potrzeby handover'u. Tę informację należy rozsiewać tym terminalom, które gadają
+
+> ta metoda, że sieć podpowiada terminalowi kogo powinien monitorować jest stosowana we każdej G.
+
+## Organizacja wymiany danych na styku radiowym
+
+### Odwzorowanie kanałów logicznych w ramkach TDM
+
+#### Pojęcia
+
+**Kanał częstotliwościowy** - nośna o szerkosoći 200kHz, w którym zorganizowana jest trasmisja okienek ("slotów") o długości 577us
+
+**Kanał fizyczny TDMA (Time Slot (TS))** - tworzony przez cykliczny ciąg (modulo 7) okienek przypisanych temu kanałowi, przeplecionych z innymi okiekankami czasowymi. Czyli naprzykład mamy Time Slot tworzony z okienek o numerze 4,
+
+**Kanał logiczny** - przepływ informacji określonego typu w ramach TS
+
+- realizowany z użyciem określonego pozdbioru okienek kanały fizycznego
+
+- określony przez zarezerwowanie określoncyh okienek (lub sekwencji okienek grupowanych po kilka) w ramach danego TS
+
+- sekwencja (pozycje) okienek tworzących kanał logiczny musi być znana prez temrinal i BTS; może być predefiniowana lub ustalona dynamiczenie wg reguł
+
+  - > bo opisano ileś standardów pakowania kanałów logicznych w fizyczne i stacja może powiedzieć do terminala "ej, stosujemy układ nr 7" i terminal wie jakie kanały logiczne jaki idą po sobie na jakich kanałach fizycznych
+
+- > np. my mówimy, że grupa czterech kolejnych okienek o numerze 2 powtarzająca się co 20 to jest nasz kanał logiczny, on będzie miał jakąś przepływność tam, co prawda będzie taki szarpany ale to nic
+
+**Paczka(burst)** - ciąg bitów o ustalonej strukturze
+
+- > W te okienka/sloty trwające 577us możemy wpisywać bursty
+
+- fizyczna zawartość okienkta ("burst" mieście się w okienku)
+- konkretna paczka przenosi informację jednego kanału logicznego
+  - no bo różne kanały potrzebują innej formy pakietów
+- zróżnicowane wymogi typów kanałów logicznych ==. różne typy (formaty paczek)
+
+#### Graficzna reprezentacja kanałów logicznych
+
+![](img/55.png)
+
+ Tu mamy taką strukturę czasową, która narzuca nam pewne ramy czasowe w które my możemy wrzucać nasze (należące do danego kanału) pakiety.
+
+> W kratkę o współrzędnych `(i, TS-)` nikt (w szczególności stacja bazowa) nie wpisze informacji innej (np. rozmowy) niż zdefiniowane dla kanału SCH bity
+
+#### Burst
+
+To są tak naprawdę pakiety, które niosą faktyczne bity, które są wpisywane w okienka.
+
+Jedna paczka przenosi informacje jednego typu (określonego kanału logicznego), czyli że mamy kilka typów burstów.
+
+Typy burstów są wymienone na rysunku poniżej.
+
+![](img/56.png)
+
+Zauważmy. że bursty są nieco krótsze niż czas okienka. Ten nieużywany okres to tzw. **guard period**, żeby mieć pewność że okienka na siebie nie nachodzą (to nawiżauje do tzw. *wyprzedzenia terminala*)
+
+*Na rysunku długości burstów są podane w bitach, więc przelicamy sobie, że jeden bit to trwa ileś tam sekundy
+
+**training sequence** - to jest wzorzec znany terminalowi i stacji bazowej. I te urządzenia rozpoznają jak ta sekwencja została zniekształcona i po tym potrafi sobie skorygować odbiornik,  żeby zmniejszyć p-stwo błędów w odbiorze.
+
+W **Frequency Correction Burst**, czyli tej analogowej dla kanału FCCH mamy przesyłane same zera (148 zer)
+
+**Dummy burst** wykorzystywane na kanałach FCCH i tych systemowych, w celu następującym: wtedy kiedy kanał nie ma nic do wysłania i by była cisza w eterze, to wrzuca się te dummy bursty, żeby podbić moc tego peaka
+
+![](img/57.png)
+
+W **Access Burst** jest bardzo krótki, bo tam terminal mówi tylko "Hej, dajcie mi dostęp do jakiejś sekwencji okienek, żebym sobie mógł pogadać z kimś". Przerwa jest dlatego taka długa, zeby nie zakłócić innych stacji bazowych (nie wyleźc poza swój czas). Tak długi *guard time*, daje gwarancje, ze terminal znajdują się teoretycznie w odległości `37.8km`, to to okienko dotrze na czas i nie zakłóci tramisji innego terminala.
+
+>  Z tego wynika wymóg na komórki, że nie powinny one mieć większego promienia niż 37.8 km (ustaliło się, że podręcznikowo 35km to jest granica).
+
+# SKONCZYŁEM 1:56:02
