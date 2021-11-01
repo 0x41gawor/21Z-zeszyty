@@ -1,4 +1,4 @@
-# Sieci Mobilne i Sieci Internetu Rzeczy
+# <img src="img/61.png" style="zoom:50%;" />Sieci Mobilne i Sieci Internetu Rzeczy
 
 B - Blok
 
@@ -646,7 +646,7 @@ Spójrzmy jeszcze raz na ten rysunek
 
 Na sieć operatorską jest co najmniej jeden rejestr HLR/AuC
 
-W tej bazie danych każdy abonent ma następujące wpisy:
+W tej bazie danych każdy abonent ma następujące wpisy: #Numery abonenta
 
 - **MSISDN - Mobile Subscriber ISDN Number**
 
@@ -1038,7 +1038,7 @@ Po otrzymaniu zasobów terminal z siecią komunikuje się za pomocą następnej 
 
 > Jedna kanały są wiekszę jedne mniejsze. Z niektórych korzystamy krótko a nie które pochłaniają dużo szczelin czasowych. To ile miejsca w strumieniu szczelinowym przeznaczymy na kanały to zależy od tego jaki jest profil ruchu (ile jest sygnalizacji, ile rozmów), te parametry pływają (constant changes) i później zobaczymy, że kanały logiczne można reazlizować fizycznie na wiele sposobów w zależności ile danego kanału logicznego w tej chwili potrzeba. Ofc. nie ma dowolki, są jakieś wzorce ile co na co przyjmować itp.
 
-#### Kanały rozgłoszeniowych
+#### Kanały rozgłoszeniowe
 
 Reszta kanałów zobaczymy potem na wykładzie podczas omawiania sygnalizacji oraz na labkach.
 
@@ -1235,3 +1235,326 @@ Strony: Mobile i Land Network
 Odworowanie kanałów musi być jednakowe!!!
 
 ![](img/60.png)
+
+# B1C4 GMS - Sygnalizacja (Control Plane)
+
+## Warstwy sterowania w 2G
+
+<img src="img/61.png" style="zoom:50%;" />
+
+- **Radio Resource Management - RR**
+  - głównie w relacji MS <==> BSC (jednak przyczyny/skutki często na styku BSC <==> MSC)
+  - zarządzanie na poziomie kanałów logicznych (przydział zasobów/kanałów strumieniomi informacji, handover)
+
+- **Mobility Management - MM**
+
+  - zasadniczo w relacji MS <==> MSC
+  - zarządzanie położeniem MS, rejestracja terminala, uwierzytelnienie usera
+  
+- **Call Control - CC** / **Call Management - CM**
+  - wyłączenie MS <==> MSC (opórcz *classmark*)
+  - zarządzenie procedurami usługowymi (własciwe usługi telekomunikacyjne)
+
+### Architektura funkcjonalna sterowania z perspektyty terminala
+
+![](img/62.png)
+
+**Usługi aplikacyjne** - to na przykład aplikacja od SMS'ów, która zajmuje się również wyświetlaczem, odbieraniem danych od usera, ubiera jakoś tego SMS'a i kieruje się do **Call mgmnt** - trudni się wysłaniem SMS'a bez wnikania w to dlaczego akurat w tym momencie mamy to zrobić.
+
+**CC** i **MM** to takie watstwy wysokiego poziomu. Poniżej nich są warstwy im służebne - **RR** i **Dm** (Data Link Layer), które mają zorganizowac im zasoby no i wreszcie warstwa **Physical layer**. Każda warstwa do black box.
+
+**RR** decyduje **co my przesyłamy**, jakiego typu sygnalizacje przesyłamy i ze względu na typ sygnalizacji (czy to będzie CC czy MM, bo RR ma świadomość jakiego typu payload dostaje na styku, łatwo rozpoznać stukturę ramek (nie ma jakiejś super enkapsulacji)). Potem **RR** mówi do **Data Link Layer** **jak należy to przesłać**.
+
+Następnie **Data Link Layer** określa **którędy (jakie kanały) przesyłamy**.
+
+### Radio Resource Management - RR
+
+![](img/63.png)
+
+^ w "grupy procedur" pogrubionym drukiem mamy nazwy grupy, a w nawiasie jakaś konkretna procedura stamtąd.
+
+**Immediate assignemt** - wysyła to BSC do MS (fizycznie przechodzi przez BTS)
+
+**Handover** - 
+
+> tak właściwie na handoverze opiera się clue sieci mobilnych, bo bez tego nie było by mobilności
+
+**Paging** - to grupa procedur do wywołania terminala
+
+**System information** - wysyłamy to kanałem BCCH
+
+### Mobility Management - MM
+
+![](img/64.png)
+
+Śledzenie terminala w obszarach przywołań.  Żeby terminal był widoczny/podpięty do sieci to się musi zarejestrować (nie zawsze w tym samym obszarze, dlatego są to kompetencje MM).
+
+### Call Control - CC
+
+![](img/65.png)
+
+**Call estalishment** - sprawienie by połączenie zaistniało
+
+**Call clearing** - zerwanie połączenia
+
+**Call information phase** - modyfikacja paramsów połączenie podczas jego trwania
+
+### Rozproszenie warstw pomiędzy węzły
+
+Różne funkcje należące do warstw sterowania 2G są nie zawsze realizowane tylko w jednym węźle.
+
+![](img/66.png)
+
+## Struktura sesji sygnalizacyjnych
+
+> Sygnalizacja to często złożony proces i wyglądający inaczej dla różnych use-casów. Ale czy da się zrobić taką w miarę ogólną strukturę? 
+> Okazuje się, że tak. Następne kilka slajdów o tym mówi
+
+![](img/67.png)
+
+Po prawej stronie wypisano dominującą (w sensie ile robie wted) warstwę sterowania dla każdej fazy (w dziedzienie czasu) i jak widać układają się one od niskopoziomych do wysoko.
+
+**Faza 1:**
+
+Terminal prosi o  kanał SDCCH, a sieć mu takowy przydziela. Na tym kanale będzie się odbywała sygnalizacja dotycząca tej zasadniczej cześći usługowej.
+
+**Faza 2:**
+
+Dochodzi do ustanowienia łącza L2 między terminalem a siecią (Data Link).  Czyli od tego momentu terminal i sieć mogą przeprowadzić komunikację, któa jest niezawodna, zabezpieczone przed błędami itd. zgodnie z paradygmatem L2.
+
+**Faza 3 i Faza 4:**
+
+uwierzytelnienie i jak git to aktywujemy szyfrowanie (bo zaraz będzie rozmowa).
+
+**Faza 5:**
+
+Faza usługowa. Został użyty termin *transakcji*, żeby nie skupiać się tylko i wyłącznie na rozmowach tel., ale też SMS, location update itp.
+
+No bo niezależnie jaka to będzie usługa (czy SMS, czy rozmowa, czy locatio update) kroki przez są generyczne i takie same
+
+**Faza 6:**
+
+Zwolnienie kanałów loginczych, po to żeby inne terminale mogły z nich korzystać
+
+***
+
+**Teraz po wstępie wprowadzimy nieco uszczegółowień**
+
+***
+
+![](img/68.png)
+
+Bardzo szczegółowy rysunek, ale operacje still opisywane są werbalnie. Nie mówimy o konkretnych wiadomościach.
+
+**Faza 1:**
+
+Pagin jest taką linią przerywaną ^, bo to krok opcjonalny. Sieć nas wywołuje i dopiero terminal żąda SDCCH, a jak terminal sam chce zadzwonić to od razu żąda SDCCH.
+
+**Faza 2:**
+
+Tutaj używamy tworu nazwanego **Layer 3 Service Request** - przenosi info jaki rodzaj usługi terminal chce przeprowadzić w ramach tej transakcji.
+
+- CM SERVICE REQUEST - realizacja usługi związanej z Call Control
+- LOCATION UPDATING REQUEST - akutalizacja położenia
+- IMSI DETACH - odłączenie od sieci (czyli terminal idzie spać) Terminal wysyła to, gdy user wyłączy tel albo włączy tryb samolotowy
+- PAGING RESPONSE -  odpowiedź na wywołanie
+- CM REESTABLISHEMENT REQUEST - nie wiem
+- other....
+
+**Faza 3:**
+
+Tu jest komunikacja z VLR HLR i EIR
+
+**Faza 4:**
+
+Tutaj losowany jest TMSI
+
+**Faza 5:**
+
+Właściwa faza usługi.
+
+> SMS'y przesyłane są kanałami sygnalizacyjnymi (bo nie ma sensu ustanawiać kanału rozmównego dla tak mało danych), więc jest to realizowane tutaj.
+
+Tu też następuja zmiana kanału sygnalizacyjnego z SDCCH (bo on jest wspólny dla terminali z całej komórki), na kanał FACCH (zorganizowany na zasobach przydzielonych do rozmowy), no bo skoro mamy już kanał rozmówny to stamtąd podbierajmy na sygnalizacje, zamiast korzystać z tego ogólnodostępnego SDCCH. 
+I na kanale FACCH jest dokończona sygnalizacja protokołem DSS1, ofc dużo tam nie zostało, ale to tutaj dopiero strony uznają, że są połączone.
+
+Łącze rozmówne zestawiane jest w sieci stałej, w obu sieciach radiowych i jazdunia.
+
+Obok rozmowy następuje wymiana wiadomości w kontekście sygnalizacji:
+
+- na kanale SACCH terminal raportuje jakość transmisji do sieci (UPLINK)
+- sieć na kanale SACCH wysyła stacje bazowe do monitorowania oraz info o wyprzedzeniu czasowym (DOWNLINK)
+- na kanale FCCH ewentualny handover
+
+Więc na kanale logicznym TCH, które jest rozmówny podkradamy zasoby i organizujemy też kanały SACCH i FCCH.
+
+***
+
+**Teraz wprowadzimy nawet i nazwy wiadomości i kanały logiczne na których one są**
+
+***
+
+![](img/69.png)
+
+^ Wcześniej opisaliśmy *L3 Service Request* i jednym z jego typów był *L3 Service Request* - tu na rysnuku po prawej mamy wartości jakie może przyjmować ten typ
+
+***
+
+**Tu mamy wykorzystanie kanałów w dziedzinie czasowej w ramach realizacji konkretnych usług**
+
+***
+
+![](img/70.png)
+
+Usługi:
+
+- a) location update
+  - RACH, żeby dostać kanał sygnalziacyny
+  - AGCH, gdzie dostajemy informacje o przyznanym kanale sygnalizacyjnym
+  - SDCCH, to jest nasz dostanięty kanał sygnalizacyjny i znim skojarzony SACCH i prowadzimy tą aktualizację położenia, jak skończymy procedura location update to kanały zostają zwolnione
+- b) poączenie telefocznie (inicjalizowane przez terminal)
+  - początek jak w a)
+  - potem wykorzystujemy 1 strumień, czyli TCH, a na nim podkradkiem zorganizowane jeszcze FACCH, i SACCH.
+- c) może być tak, że między terminalem a siecią istnieje kanał TCH (z racji jakiś tam specjalnych usług nie został rozłączony) i terminal chce połączenie tel.
+  - więc dostajemy sygnalizację od razu na kanale FACCH
+- d) połacznie telefoniczne (inicjalizowane przez sieć)
+  - identycznie jak w b), tylko że poprzedzone fazą pagingową (wywołanie terminala przez sieć).
+
+#### Pełny stos protokołów sygnalizacyjnych w GSM
+
+to dla dociekliwych
+
+![](img/71.png)
+
+## Przykłady procedur sygnalizacyjnych
+
+### Nawiązywanie połączenie sygnalizacyjnego
+
+![](img/72.png)
+
+1)
+
+ Terminal w kanale losowym RACH (bo terminal losuje który dokładnie RACH wykorzysta(jest ich kilknaście)) wysysła wiadomość **Channel Request**.
+
+W wiadomości **Channel request** jest przekazywany identyfikator terminala, po to że jak sieć na kanale AGCH (Access Granted Channel) przyznając danego terminalowi kanał SDCCH, to z racji, że AGCH jest kanałem wspólnym, to odbierze to każdy terminal i będzie się zastanawiał czy to jest do mnie, więc trzeba te odpowiedzi jakoś identyfikować. 
+
+2)
+
+BTS wysyła wiadomości **Channel Request Demand** do sterownika czyli BSC i on podejmuje decyzję czy dać jakiś kanał czy nie. Jeśli tak to odbywa się to w dwóch krokach:
+
+- najpierw sterownik wysterowuje BTS (stację bazową) mówiąc mu "zarezerwuj ten kanał mordo" w wiadomości **Channel activation (SDCCH #x)**, a BTS potwierdza wykonane zadanie wysyłając **Channel Activation ACK**
+- No i wtedy CBS  wysyła do BCS wiadomość **Immediate assignemnt**
+  - w niej jednym z parametrów jest **TA - timing advance** - czyli wyprzedzenie czasowe z jakim terminal powinien nadawać. 
+    - Ten parametr wylicza się tak, że BTS widzi wedługo swojego wzorca czasowego ta wiadomość (czy ona jest przesunięta w fazie czy nie) i raportuje to opóźnienie jakie widzi do BSC. No i BSC jeśli to opóźnienie wyliczy, ze wynosi 3 bity, to wysyła wartość 3 bity w TA, żeby terminal wiedział jak wysyłać względem tego co wysłał wcześniej.
+
+^ po prawej stronie na rysunku mamy strukturę bursta wiadomości **Channel request**. Establishment cause może wskazywać priorytet obsługi np. Emergency call jest ważny i nie chcemy, zeby został przez sieć odrzucony (i zobacz, że nie musisz płacić za emergency call), więc od początku chcemy wiedzieć jaki to typ.
+
+**Timing Advance - wyprzedzenie czasowe**
+
+<img src="img/73.PNG" style="zoom:50%;" />
+
+Po prostu jeśli nam się kończy ten okres ochronny w burst, to stacja bazowa mówi do terminala o ile on musi zmienić swoją trasmisję względem tego co teraz robi. TA podaje się w bitach, ale my wiemy, że w GSM bit to ileś nano sekund, więc nie ma problemu dla nadajnika, żeby on sobie TA przeliczył na opóźnienie/ przyspieszenie z jakim ma wysyłać. Czyli TA jest wysyłane w dwóch przypadkach:
+
+- w trakcie zestawiania połączenia rozmównego w wiadomości *Immediate assignment* na kanale AGCH
+- podczs rozmowy na kanale  SACCH 
+
+### Zestawienie kanału rozmównego
+
+To niejako kontynuacja poprzednego przypadku. Mamy już kanał sygnalizacyjny i chcemy zestawić kanał rozmówny TCH.
+
+![](img/74.PNG)
+
+### Handover
+
+Ten przypadek dotyczy handover'u między dwiem stacjami bazowymi, czyli nowy sterownik BSC, ale odbywa się w ramach wspólnego MSC.
+
+![](img/75.PNG)
+
+Handover zawsze (niezależnie od zasięgu)
+
+**0)** 
+
+Najpierw mamy fazę prowadzenia rozmowy czy tam innej transakcji i terminal prowadzi pomiary stacji okolicznych BTS (tych które dostał na SACCH od sieci w fazie 5).
+
+Jak BSC na postawie pomiarów jakie dostaje od MS stwierdzi, że należy zrobić handover to wysyła do MSC **HREQ - Handover Request** podsyłając listę najlepszych kandydatów.
+
+**1)**
+
+MSC podejmuje decyzję na kogo przepiąć i informuje  nowe BSC wiadomością **HREQ** informując, ze trzeba przeprowadzić handover i identyfikując to jakoś (**HO ref.**) - czyli przygotowuje nowe BSC (a co za tym idzie nowego BTS) do rezerwacji zasobów od strony sieci radiowej.
+
+Jak ta faza została zakończona to nowe BTS wysyła ACK do nowego BSC, a ono wysyła ACK do MSC.
+
+**2)**
+
+No i teraz MSC za pośrednictwem aktualnego BSC wysyła do MS wiadomość **HCMD - ?Handover Command?**, żeby terminal się przełączył do innego BTS. Faktyczne przepięcie. Ta procedura jest złożona i wiadomości jest duża. Tutaj wysyłam ten *HO ref.*, żeby było wiadomo do której BTS i jaki handover, bo naraz w sieci może być wiele handoverów
+
+> Jak jedzie pociąg to nagle wszyscy userowie się przełączają mamy taki zbiorowy handover.
+
+Potem MS jak handover się zakończy to wysła, to do MSC, żeby ten powiedział do starego BSC. żeby zwolnił zasoby na startm BTS.
+
+**Make before break** - najpierw robimy wszystko, a potem wywalamy niepotrzebne. Czyli przez pewien moment mamy podwójnie zasoby zarezerwowane, ale dzięki temu mamy ciągłość przełączenia.
+
+> W GPRS z racji, że są pakietówki (bardziej odporne na zakł.) i widocznie ta sygnalizacja znacznie komplikuje sprawy mniej staramy się o super-idealny handover.
+
+### Classmark
+
+Slajd dodatkowy
+
+![](img/76.PNG)
+
+**Classmark** to takie 4 bity, które mają informacje o terminalu. Między innymi jego moc z jaką może pracować, i jak wiemy to, to możemy zarządzać lepiej handover'em, bo jak mamy w tych paramsach większą moc, to można później go zrobić.
+
+### Pomiary podczas aktywnego połączenie tel.
+
+Slajd dodatkowy
+
+![](img/77.PNG)
+
+## Inne aspekty GSM
+
+Taki rozdział na koniec opowiastki o GSM.
+
+Takie mamy używane kodeki w GSM
+
+| Kodek            | FR       | EFR (najlepszy) | HR        | AMR             |
+| ---------------- | -------- | --------------- | --------- | --------------- |
+| **Przepływność** | 13kbit/s | 12.2kbit/s      | 5.6kbit/s | 4.75-12.2kbit/s |
+
+**Kodowanie kanałowe** - czyli te zabezpieczające przed błędami. W sieciach komórkowych powszechnie stostuje się kody korekcyjne. Niestety w radiówcę są błędy dość częste i dlatego, aż dwa razy więcej się wysyła czasem bitów w celu kodowania. Trzeba sobie z tym radzić.
+
+**Przeplot time-slotów**
+
+Okazuje się, że błędy w radiówce statystycznie występują jakoś tam wg. wzorca i można ich trochę pounikać robiąc **interleaving**, czyli, że bierzemy 8 burstów, mieszamy ich kolejność oraz ich zawartość wewnętrznie i cyk, błędy są mniejsze.
+
+Ceną za takie coś jest wprowadzane opóźnienie (no bo burst, który miał iść pierwszy to go cofniemy na koniec). Wychodzi ono 37.5ms (Burszti nie pamięta czy w jedną czy w obie strony).
+
+**Modulacja GMS-K** 
+
+Prosta ale sprytna. Ta do wkrywania kanałów FCCH.
+
+Brak AM => mała wartość peak/min ratio co się przekłada, że łatwo wzmacniacze się robi, czyli ez realizacja sprzętowa co do dziś jest ważne, ale wtedy to już wgl.
+
+**Frequency hopping**
+
+Skakanie po częstotliwościach stosuje się w sieciach komórkowych.
+
+Kanały radiowe są podatne na zakłócenia i te podatności bardzo się różnią w zależności od zakresu częstotliwości. I może być tak, że w pewnym zakresie terminale i stacje bazowe mają słabe warunki (bo akurat atmosferycznie jest jakieś zakłócenie w tym czasie na ten zakres) , więc dana stacja na pewnych kanałach widzi lepszy sygnał na innych gorzej.
+
+Więc chodzi o to, żeby dana stacja raz pracowała na jednym zestawie nośnych raz na innym, a stacja sąsiednia na odwrót, a jeszcze inna jeszcze inaczej. Ale żeby generalnie nie wchodziły na siebie, że zawsze dana częstotwliwość była dobrze wykorzstana (bo na tamtej stacji jest słabo ale 3 obok już jest gitem). A jak mamy słabą jakąś częstotliwość na dużym terenie, to żeby raz ją miała jedna stacja, raz druga. Żeby nie było tak, że jedna BTS dostanie to słabą i przez cały dzień ma pod górkę.
+
+> Realizuje się to tak, że sieć wymyśla rytm w jakim to trzeba zmieniać i po prostu BTS idą według tego wzorca.
+
+**Frequency reuse**
+
+Podczas planowania sieci ważny aspekt, trzeba dobrze zaplanować nośne na stacje itp.
+
+**Współpraca SIM z telefonem i jego apkami**
+
+**SIM** to taki mały komputerek, który ma interfejs zewnętrzny dla aplikacji wykonywanych na telefonie. Są do tego jakieś interfejsy zdefiniowane itd. 
+
+Slajdy do tego działu.
+
+![](img/78.PNG)
+
+![](img/79.PNG)
+
