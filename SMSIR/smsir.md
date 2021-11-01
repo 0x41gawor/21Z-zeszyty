@@ -1145,7 +1145,7 @@ Kanał ten zawiera szereg informacji o stacji bazowej:
   - no bo różne kanały potrzebują innej formy pakietów
 - zróżnicowane wymogi typów kanałów logicznych ==. różne typy (formaty paczek)
 
-#### Graficzna reprezentacja kanałów logicznych
+#### 3.4 Graficzna reprezentacja kanałów logicznych
 
 ![](img/55.png)
 
@@ -1179,4 +1179,59 @@ W **Access Burst** jest bardzo krótki, bo tam terminal mówi tylko "Hej, dajcie
 
 >  Z tego wynika wymóg na komórki, że nie powinny one mieć większego promienia niż 37.8 km (ustaliło się, że podręcznikowo 35km to jest granica).
 
-# SKONCZYŁEM 1:56:02
+#### Kanały razem
+
+FCCH, SCH i BCCH zawsze występują razem, na tej nośnej gdzie jest peak. Czyli na zielonej na rysunku. Na żółtej i niebieskiej wgl nie występują te kanały. Wtedy po protu na zółtej i niebieskiej okienka normalnie zajmowane przez FCCH, SCH i BCCH są kanałami rozmównymi (TCH).
+
+<img src="img/58.png" style="zoom:80%;" />
+
+#### Realne odwzorowanie kanałów logicznych
+
+Ten rysunek z rodziału 3.4 był tylko poglądowy jak to działa i nie musiał pokazywać, które kanały tak na prawdę, są w których okienkach.
+
+Tranmisję mamy prowadzoną w dwóch kierunkach:
+
+- up-link - od terminala do sieci
+- down-link - od sieci do terminala
+
+I te kierunki są asymetryczne, bo np. kanał FCCH jest tylko down-link. Tak samo kanał RACH jest tylko up-link. Z kolei PCH też jest tylko down-link. Kanały TCH są symetryczne. Kanał SACH w kierunku up-link są przesyłane pomiary (te prowadzeone przez terminal o stacjach naookoło), a down-link sieć przesyła wartość wyprzedzenie transmisji i moc z jaką terminal ma działać.
+
+![](img/59.png)
+
+**Omówienie rysunku**
+
+**^Downlink TS 0**
+
+Na TS 0 i 1 mogą być kanały sygnalizacyjnego. Mogą być kanały rozmówne, ale gdy nie ma kanałów sygnalizacyjnych. 6 pierwszych ramek w wieloramce TS 0 zajmują kanał FCH, SCH i 4x BCCH. **Wieloramka** - to 51 ramek. BCCH powtarza się co wieloramke, a FCCH i SCH powtarzają się co 10 ramek.
+
+Na TS-0 pojawiają się również kanały SDCCH. Jak terminal dostanie możliwość prowadzenia sygnalizacji na potrzeby usługi, to na własność dostaje taki jeden umowny slot (np. na rysunku te 4x `SDCCH 0`) jakoś tam powtarzalny w kolejnych wieloramkach. 
+
+Jest też dla slotów kanału SDCCH dla danego terminala skojarzony slot kanału SACCH, który moniture kanał SDCCH, na potrzeby ewentualnego handover'u.
+
+> Czyli jak widać nie tylko rozmowy można handoverować.
+> Czy handovery kanału sygnalizacyjnego są często? Raczej nie, ale no sygnalizacja trochę trwa podczas zestawiania połączenia przez sieć (kilka czy kilkanaście sekund czasami), no więc ja jadąć samochodem, to możliwe, że zmienię komórkę.
+
+**^Downlink TS 1**
+
+On zawiera tylko dedykowane kanały sygnalizacyjnego dla jakiś tam terminali. Zwykle w komórce wystąpi jedna nośna, która me takie właśnie sygnalizacyjne TS'y i to powinno wystarczyć na sygnalizacje na terenie całej komórki, no bo jak klient potrzebuje zestawić połączenie to to trwa parę sekund, potem zwalnia te zasoby i następny może.
+
+> Jeżeli kanał nie wyrabia, to po prostu dostawimy drugą stację bazową, ona może być na tym samym maszcie, tylko na innych częstotliwościach, zrobimy kierunkową antenę, zmniejszymy liczbę klientów przypadającą na te kanały.
+
+**^Uplink/Downlink TS 2**
+
+Tutaj jak widać leci transjimsja głosowa i co jakiś czas kanał od monitorowania (SACCH)
+
+**^Uplink TS-0**
+
+Kompletnie inaczej wygląda, no bo terminal nie musi słać tych info co stacja bazowa, ale ma sloty na RACH, bo w te kanały terminal moze wrzucać swoje żadania dostępu do usługi (np. rozmowa)
+
+> W wi-fi jak dwa urządzenia wrzucą w ten sam kanał swój pakiet, to on się zakłóci i nie wyśle i aplikacje jakoś się skapną i wyślą go powtórnie, ale dopiero po jakimś czasie lokalnie wylosowanym, które to czasy prawdopodobnie będą różne i już do kolizji nie dojdzie.
+> W GSM zasada jest analogiczna, tylko zrzutowana na taki skwantowany czas ,bo terminale wrzucają to tylko w RACH.
+
+### Odwzorowanie kanałów po obu stronach 
+
+Strony: Mobile i Land Network
+
+Odworowanie kanałów musi być jednakowe!!!
+
+![](img/60.png)
