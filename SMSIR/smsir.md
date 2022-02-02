@@ -1,4 +1,4 @@
-# <img src="img/61.png" style="zoom:50%;" />Sieci Mobilne i Sieci Internetu Rzeczy
+# Sieci Mobilne i Sieci Internetu Rzeczy
 
 B - Blok
 
@@ -14,7 +14,7 @@ C - Część
 
 
 
-Każde R, to kolejny Release. Aktualnie trwają pracę nad R17, ale to na papierze
+Każde R, to kolejny Release. Aktualnie trwają pracę nad R17, ale to na papierze tylko.
 
 #### 2G - GSM
 
@@ -70,7 +70,7 @@ W ogólności sieć mobilna zawsze ma dwie sekcje
   - taka niska wartstwa (tylko przesyła a usgługami to się endpointy zajmują -  z jednej strony terminale, z drugiej sieć szkieletowa)
 - Sieć szkieletowa
   - **Core** - Core Netowork
-  - ona zajmuje się realizacją usług pod kątek użytkownika
+  - ona zajmuje się realizacją usług pod kątem użytkownika
 - No i są jeszcze terminale (urządzeni końcowe, te w rękach klienta)
 
 Taki podział obowiązuje przez wszystkie generacje zmieniają się tylko bloczki w środku.
@@ -81,9 +81,13 @@ Taki podział obowiązuje przez wszystkie generacje zmieniają się tylko bloczk
 
 MS - Mobile Station (czyli terminal)
 
-BTS - Base Transceiver Station
+BTS - Base Transceiver Station - odpowiada za *wireless* komunikację pomiędzy MS, a siecią - potocznie mówiąc "komórka"
 
+<img src="img/80.png" style="zoom:20%;" />
 
+BSC - Base Station Subsystem - odpowiada  za *handling traffic* i sygnalizację pomiędzy terminalem i *network switching subsystem'em*, to taka szafa, którą mają operatorzy
+
+<img src="img/81.png" style="zoom:20%;" />
 
 #### 3G - UMTS
 
@@ -101,16 +105,21 @@ Zmiany w RAN:
 
 Zmiany W CORE:
 
-- MSC -> 3G MSC
-- SGSN -> 3g SGSN
-- GMSC i GGSN bez zmian
+- MSC -> 3G MSC (MSC - Mobile Switching Centre)
+
+- SGSN -> 3g SGSN (SGSN - Serving GPRS Support Node)
+
+- GMSC i GGSN bez zmian (GMSC - Gateway Mobile Switching Centre, GGSN - GPRS Gateway Service Node)
+
+  - > Sieć pakietową (czyli taką na jakiej działa internet wprowadza GRPS, daltego gateway'em do Internetu jest GGSN)
+
 - AuC zmodernizowany (większe bezpieczeństwo)
 
 **Release 4**
 
 O ile bloki są podobne w RAN, to już sygnalizacja w nich jest inna, bo w UMTS inne kodowanie weszło.
 
-Pierwsze releas'y UMTS pracowały z ISDN, potem trzeba bylo przejść na ATM i IP, więc kolejne releas'y dodawały swoje 5gr w tym temacie. Siecią transportową przestawała być stara SDN, tylko pakietówki. I właśnie jak świat zaczął przechodzić na pakietówki, to pomyślano, że sieć komórkową też na pakietówkę hyc, ale jak to zrobić? Pakiet to zupełnie co innego niż stały kanał o stałej przepływności PCM-kowy i okazało się, że dół węzłów trzeba zmodyfikować i okazało się, że nawet architektonicznie można to inaczej zrobić, a nawet warto.
+Pierwsze releas'y UMTS pracowały z ISDN, potem trzeba bylo przejść na ATM i IP, więc kolejne releas'y dodawały swoje 5 groszy w tym temacie. Siecią transportową przestawała być stara SDN, tylko pakietówki. I właśnie jak świat zaczął przechodzić na pakietówki, to pomyślano, że sieć komórkową też na pakietówkę hyc, ale jak to zrobić? Pakiet to zupełnie co innego niż stały kanał o stałej przepływności PCM-kowy i okazało się, że dół węzłów trzeba zmodyfikować i okazało się, że nawet architektonicznie można to inaczej zrobić, a nawet warto.
 
 <img src="img/6.png" style="zoom:45%;" />
 
@@ -118,19 +127,19 @@ Pierwsze releas'y UMTS pracowały z ISDN, potem trzeba bylo przejść na ATM i I
 
 <img src="img/7.png" style="zoom:45%;" />
 
-Pojawisło się **3G HSPA** (**H**igh Speed **P**acket **A**ccess). Nowa technologia do zwiększania przepływności bitowej (znacznie!!), którą sprzężono z sieciami Wi-Fi. Ale na tej samej strukturze co 3G, więc bez żadnej tam rewolucji.
+Pojawisło się **3G HSPA** (**H**igh **S**peed **P**acket **A**ccess). Nowa technologia do zwiększania przepływności bitowej (znacznie!!), którą sprzężono z sieciami Wi-Fi. Ale na tej samej strukturze co 3G, więc bez żadnej tam rewolucji.
 
 <img src="img/8.png" style="zoom:45%;" />
 
 Ile ta technologia dała przepływności?
 
-|            | Downlink  |    Uplink    |
-| :--------: | :-------: | :----------: |
-| Release 5  | 14.4 Mb/s |  5.76 Mb/s   |
-| Release 7  |  28 Mb/s  |  11.5 Mb/s   |
-| Release 8  |  42 Mb/s  | 23 Mb/s (R9) |
-| Release 10 | 168 Mb/s  |      -       |
-| Release 11 | 336 Mb/s  |   70 Mb/s    |
+|                        | Downlink  |    Uplink    |
+| :--------------------: | :-------: | :----------: |
+|     Release 5 UMTS     | 14.4 Mb/s |  5.76 Mb/s   |
+|    Release 7 HSPA+     |  28 Mb/s  |  11.5 Mb/s   |
+|     Release 8 LTE      |  42 Mb/s  | 23 Mb/s (R9) |
+| Release 10 LTE4dvanced | 168 Mb/s  |      -       |
+|    Release 11 MIMO     | 336 Mb/s  |   70 Mb/s    |
 
 #### 4G -  LTE
 
@@ -148,9 +157,9 @@ UTMS Release 8 to jest LTE/EPC
 
 ![](img/11.png)
 
-**Data Plane** - moja mowa, dane użutkownika (Dane pakietowe)
+**Data Plane** - moja mowa, dane użutkownika (**Dane pakietowe**)
 
-**Control Plane** - protokoły do wysterowania (przygotowanie węzłów po drodze, do przekazania danych) Data Plane (Sygnalizacja/Sterowanie)
+**Control Plane** - protokoły do wysterowania  Data Plane (przygotowanie węzłów po drodze do przekazania danych) (**Sygnalizacja/Sterowanie**)
 
 Widać jak na początku szło to przez jedne urządzenia, a potem zaczęły one się specjalizować np. w LTE wydzelono MME (Mobilty Management Element) osobny serwer, przez który dane głosowe nie przechodzą wgl., a on czuwa nad obsługą mobilności userów (hand-overy realizuje).
 
@@ -172,7 +181,7 @@ I naprzykład sieć GSM backapuje inne, wyższe technologie w zakresie usług g�
 
 Warto zwrócić uwagę, na to że VoLTE jest na IMS.  IMS to skomplikowanty podsystem, który wspiera działanie usług głównie głosowych. 
 
-Większość ludzi ma głos po VoLTE i za syngalizację odpowiada tam IMS (jakieś tam serwery, w chmurze, które służą do zestawiania naszych sesji głosowych).
+Większość ludzi ma głos po VoLTE i za sygnalizację odpowiada tam IMS (jakieś tam serwery, w chmurze, które służą do zestawiania naszych sesji głosowych). IMS to framework architektoniczny do dostarczania usług multimedialnych na IP.
 
 #### 4G LTE - kluczowe techniki
 
@@ -205,7 +214,7 @@ xQAM - Quadrature Amplitude Modulation x - number of combinations
 
 ![](img/16.png)
 
-Dla nas opóźnienia rzędy 1ms w domu w 5G nic nie znaczą, ale w przemyśle, gdzie opóźnienia muszą być mega niska, to ma znaczenie, czy VR
+Dla nas opóźnienia rzędy 1ms w domu w 5G nic nie znaczą, ale w przemyśle, gdzie opóźnienia muszą być mega niska, to ma znaczenie, czy w Virtual Reality
 
  <img src="img/3.png" style="zoom:75%;" />
 
@@ -258,7 +267,7 @@ Dlatego wzięto ISDN jako klasa bazowa i chciano ją zmodyfikować i stworzyć s
 
 Czyli widać, że trzeba się zająć dostępem do sieci (bo jest bezprzewodowy i abonenci się poruszają) oraz sterowaniem zgłoszeniami, a cała reszta mogła zostać i być bardzo podobna jak to było w ISDN.
 
-> I to widać w architekturze jak sieć mobilna wykorzstuje system syngalizacji nr 7, tak głęboko jak się tylko da. itd. Natomiast to co trzeba było dobudować, co wynikało z mobilności, to dorobiono.
+> I to widać w architekturze jak sieć mobilna wykorzystuje system sygnalizacji nr 7, tak głęboko jak się tylko da. Natomiast to co trzeba było dobudować, co wynikało z mobilności, to dorobiono.
 
 ## Generyczne aspekty sieci mobilnych
 
@@ -279,8 +288,8 @@ Jak ktoś ma potrzebe to dostaje ten zasób, a jak nie ma potrzeby to mu się od
 Po to mamy ten dostęp radiowy, żeby można było łazić czy jeździć. Przy wi-fi też jest jakaś mobilność, ale ograniczona (to tak jak przywiąże kogoś do drzewa i powiem, no jesteś mobilny w jakimś tam zakresie (zasięg sznurka)). Tu chodzi oto, żeby tego sznurka nie było. 
 Mobilności są dwie:
 
-- twarda - w trakcie połączenia
-- nomadyczna - teraz jestem tu, potem pojadę do domu, a cały czas chcę być dostępny dla sieci. Sieć musi mniej-więcej wiedzieć, gdzie jestem, żeby do mnie zadzwonić
+- **twarda** - w trakcie połączenia
+- **nomadyczna** - teraz jestem tu, potem pojadę do domu, a cały czas chcę być dostępny dla sieci. Sieć musi mniej-więcej wiedzieć, gdzie jestem, żeby do mnie zadzwonić
 
 #### Usługi końcowe
 
@@ -292,12 +301,12 @@ W sieci telefonicznej był sam głos, a sieci mobilnego wprowadziły wiadomości
 
 Z powyższych trzech aspektów wynikają 3 generyczne bloki sterowania:
 
-- Zarządzanie zasobami radiowymi
-  - blok funkcjonalny, który jest odpowiedzialny za zorganizowanie sposobu udzielania dostępu klientom do zasobu radiowego i pamiętajmy, to musi być w dwóch aspektach rozpatywane - płaszczyzny danych i płaszczyzny sterowania. Żebym ja mógł przesyłać dane, to muszę najpierw sieci to powiedzieć, i to powiedzenie odbywa się na tych samych zasobach radiowych. I na zasoby na data i control pane idzie jakaś rywalizacja i sieć musi to jakoś rozwiązać.
-- Zarządzanie mobilnością
+- Zarządzanie **zasobami radiowymi**
+  - blok funkcjonalny, który jest odpowiedzialny za zorganizowanie sposobu udzielania dostępu klientom do zasobu radiowego i pamiętajmy, to musi być w dwóch aspektach rozpatrywane - płaszczyzny danych i płaszczyzny sterowania. Żebym ja mógł przesyłać dane, to muszę najpierw sieci to powiedzieć, i to powiedzenie odbywa się na tych samych zasobach radiowych. I na zasoby na data i na control plane idzie jakaś rywalizacja i sieć musi to jakoś rozwiązać.
+- Zarządzanie **mobilnością**
   - w aspekcie nomadycznym (od czasu do czasu terminal jak się gdzieś przemieści, to się rejestruje gdzie jest, żeby sieć wiedziała)
   - aspekt twardy (jak mam połączenie zarezerwowane, to może one zostać poddane tzw "handover'owi")
-- Sterowanie zgłoszeniami
+- Sterowanie **zgłoszeniami**
   - to bardziej realizacja usług użytkownika (czyli user robi coś z siecią core za pomocą sieci radiowej np. transfer pakietów (np. VoIP))
     - W 2G, 3G transfer pakietów to było coś kompletnie innego niż transfer głosu. Od 4G to jest to samo bo VoIP over LTE. LTE jest siecią pakietową a usługa głosowa to jest realizowana na tych pakietach właśnie. Sieć LTE nie widzi głosu tylko pakiety o parametrach do przesłania.
 
@@ -305,14 +314,16 @@ Z powyższych trzech aspektów wynikają 3 generyczne bloki sterowania:
 
 ### Komórka
 
-Organizacja zasób w sieciach mobilnych odbywa się na zasadzie komórek. Obszarów relatywnie małych, które są pokryte poprzez stacje bazowe. De facto stacje bazowe to anteny. Przedstawiamy komórki jako hexagonalne obszarki, ale one nigdy nie są hexagonalne, nie ma takiej możliwości. One są kompletnie nieregularne to zależy od ukształtowania terenu, i wielu rzeczy jakie tylko sobie możemy wyobrazić. One zachodzą na siebie (jak nie zachodzą to mamy dziury (tak jak w tych moich bierszczadach)). 
+Organizacja zasobów w sieciach mobilnych odbywa się na zasadzie komórek. Obszarów relatywnie małych, które są pokryte poprzez stacje bazowe. De facto stacje bazowe to anteny. Przedstawiamy komórki jako hexagonalne obszarki, ale one nigdy nie są hexagonalne, nie ma takiej możliwości. One są kompletnie nieregularne to zależy od ukształtowania terenu, i wielu rzeczy jakie tylko sobie możemy wyobrazić. One zachodzą na siebie (jak nie zachodzą to mamy dziury (tak jak w tych moich Bieszczadach)). 
 
 >  Jak jest antena sektorowa, to ona jest w narożniku i jej "dzieci" wysyłaja do niej, a może być antena dookólna i jest na środku komórki
 
-Teminal cały czasz mierzy co się dzieje dookoła (jaki zasięg skąd), jak wykryje ze jest w zasięgu lepszej stacji (zasięg lepszy) to się zamelduje w niej. Ale nawet nie - póki terminal jest w obszarze liczącym kilka komórek, to on tylko pilnuje czy jest w tym obszarze, czy on przypadkiem nie przeszedł obszaru, że on nie widzi żadnej z tych stacji bazowych, wtedy przerejestruje się mówicą sieci "jestem już nie w tej piaskownicy tylko innej". Żeby sieć mniej więcej widziała, gdzie on jest.
-Natomiast jak on gada teraz, to cały czas śle komunikaty pomiary z tego co widzi naookoło. Terminal jak zaczyna połączenie to dostaje od sieci listę stacji bazowych, które ma monitorować pod kątem jakości sygnału i raporty wysyłać do sterownika. A sieć wie co się dzieje w kontekście innych stacji obok i sama decyduje czy nie przełączyć w końcu jakiegoś terminala na inną stację bazową. Np. jestem bliżej i mam lepszy zasięg (dB) z jakiejś stacji, ale nie ma tam zasobów to sieć mnie przerzuca (**handover**) do innej stacji bez wiedzy terminala.
+Teminal cały czasz mierzy co się dzieje dookoła (jaki zasięg skąd) i jak wykryje ze jest w zasięgu lepszej stacji (zasięg lepszy) to się zamelduje w niej. Sieć nie wie, gdzie jest terminal - póki terminal jest w obszarze (liczącym kilka komórek), to on tylko pilnuje czy jest w tym obszarze, czy  przypadkiem nie przeszedł do innego obszaru (wtedy nie widzi żadnej z stacji bazowych obszaru), więc wtedy przerejestruje się mówicą sieci "jestem już nie w tej piaskownicy tylko innej". Żeby sieć mniej więcej widziała (z dokładnością do obszaru), gdzie jest terminal.
+Natomiast jak terminal prowadzi rozmowę, to cały czas śle komunikaty pomiary z tego co widzi na około. Terminal jak zaczyna połączenie to dostaje od sieci listę stacji bazowych, które ma monitorować pod kątem jakości sygnału i raporty wysyłać do sterownika. A sieć wie co się dzieje w kontekście innych stacji obok i sama decyduje czy nie przełączyć w końcu jakiegoś terminala na inną stację bazową. Np. jestem bliżej i mam lepszy zasięg ([dB]) z jakiejś stacji, ale nie ma tam zasobów, to sieć mnie przerzuca (**handover**) do innej stacji bez uzgadniania z terminalem.
 
-Czyli sieć robi handovery i to się nazywa **centralny arbitraż zasobów**. Bo np. w sieciach pakietowych, terminal może sam zainicjować handover. W pakietówce opóźnienia 0.5 sekudny są spoko, ale w głosówce już nie. A nasz sieć ma mieć niezawodność 99.9%
+Czyli sieć robi handovery i to się nazywa **centralny arbitraż zasobów**. 
+
+**W sieciach pakietowych**, terminal może sam zainicjować handover, ale w pakietówce opóźnienia 0.5 sekundy są spoko, ale w głosówce już nie. A nasza sieć ma mieć niezawodność 99.9% (bo jest publiczna)
 
 <img src="img/25.png" style="zoom:75%;" />
 
@@ -326,15 +337,15 @@ Załóżmy, że klienci sobie biegają, komórki są niezbyt duże i teraz mamy 
 >
 > To bez sensu. Chodzi o to, czy on jest w tej piaskownicy czy już w innej, wtedy groźnie. 
 
-Obszary przywołań to są nasze piaskownice i póki dziecko chodzi w niej po kamykach to jest git. Ale jak przejdzie do innego, to chcemy od niego to usłuszeć. I to jest właśnie **nomadyzm** obszary przywołań wysyłają  info (parametry, nazwy, co umie itd.), żeby terminal wiedział gdzie jest, dostaje od obszaru liste stacji bazowych i pamięta. I nagle terminal nie widzi (słaby zasięg) żadnej stacji z listy, wtedy mówi "o kurcze przeszedłem stację bazową" muszę się przerejestrować. Odbiera od sieci nowy obszar i mówi do niej "teraz jestem tutaj, jak coś do mnie to tu szukajcie".  
+Obszary przywołań to są nasze piaskownice i póki dziecko chodzi w niej po kamykach to jest git. Ale jak przejdzie do innego obszaru, to chcemy od niego to usłyszeć. I to jest właśnie **nomadyzm** obszary przywołań wysyłają  info (parametry, nazwy, co umie, jakie usługi itd.), żeby terminal wiedział gdzie jest, dostaje od obszaru listę stacji bazowych i pamięta. I nagle terminal nie widzi (słaby zasięg) żadnej stacji z listy, wtedy mówi "o kurczę przeszedłem między obszarami, muszę się przerejestrować". Odbiera od sieci nowy obszar i mówi do niej "teraz jestem tutaj, jak coś do mnie to tu szukajcie".  
 
-> Jak dużo komórek to obszar, jak szybko się przełącza, jak często terminal dostaje info to wszystki sobie wylicza operator i on to wie na podstawie pomiarów, statystyk itp.  
+> Jak dużo komórek to obszar, jak szybko się przełącza, jak często terminal dostaje info -  to wszystko sobie wylicza operator i on to wie na podstawie pomiarów, statystyk itp.  
 >
-> Operator robi kompromis, żeby sygnalizacji nie było za dużo, ale żeby też było ez znaleźć klienta, gdy przychodzi do niego połączenie.
+> Operator robi kompromis, żeby sygnalizacji nie było za dużo, ale żeby też było łatwo znaleźć klienta, gdy przychodzi do niego połączenie.
 
 Jak ktoś dzwoni do klienta, to sieć wie, w którym jest obszarze i wtedy okólnik z każdej stacji bazowej (broadcast) jest tam wysyłany  "ej, gościu ktoś do Ciebie, zgłoś się". I terminal wtedy odpowiada na tej, na której ma najlepszą moc. I terminal mówi do niej "dajcie mi kanał sygnalizacyjny, bo zdaje się to o mnie chodzi".
 
-W mobilności twardej mamy zestawiony kanał i jego trzeba błyskawicznie przełączać przy poruszaniu się, żeby ani bit nie uciekł. I to jest realizowane wedługo paradygmatu *make before break*, póki terminal się nie przełączy do nowego zarezerwowanego dla niego zasobu w innej stacji bazowej, to cały czas korzysta z tej starej.
+W *mobilności twardej* mamy zestawiony kanał i jego trzeba błyskawicznie przełączać przy poruszaniu się, żeby nic nie uciekło. I to jest realizowane według paradygmatu *make before break*, póki terminal się nie przełączy do nowego zarezerwowanego dla niego zasobu w innej stacji bazowej, to cały czas korzysta z tej starej.
 
 ### Obszar przywołań
 
@@ -342,7 +353,7 @@ Zbiór kilku komórek w których spodziewamy się danego abonenta. Chodzi o to, 
 
 ## Usługi końcowe
 
-Usługi końcowe to były
+Usługi końcowe w GSM to były
 
 - rozmówne
 - wywiedzione z rozmównych
@@ -363,7 +374,7 @@ Chcemy, żeby sieć była **transparentna** dla usługi. Co nas obchodzi czy tam
 
  **Więc trzeba zapewnić wsparcie dla transparentności**
 
-> I to się nie da zrobić, bo każda sieć na świecie musiałaby mieć ten sam profil usługowy (zestaw usług) co moja sieć macierzysta, a wiadomo nie wszędzie na świecie jest tak samo. Znaczy takie podstawy jak rozmowy to i tak są wszędzie, ale jakieś bardziej pro rzeczy już nie, więc profil mój macierzysty nie wszędzie był honorwany, często gdzieniegdzie był okrojony.
+> I to się nie da zrobić, bo każda sieć na świecie musiałaby mieć ten sam profil usługowy (zestaw usług) co moja sieć macierzysta, a wiadomo nie wszędzie na świecie jest tak samo. Znaczy takie podstawy jak rozmowy to i tak są wszędzie, ale jakieś bardziej pro rzeczy już nie, więc profil mój macierzysty nie wszędzie był honorowany, często gdzieniegdzie był okrojony.
 
 ## Standaryzacja GSM
 
@@ -383,21 +394,21 @@ To są dwa rysunki dla sieci PSTN/ISDN/SS7
 
 
 
-Mamy sieć stałą (między CA/MSC a drugim CA/MSC) i mamy dostępy radio do niej (obszar pomarańczowy)). W sieci komórkowej mamy zmian obszarów pomarańczowych. 
+Mamy sieć stałą (między CA/MSC a drugim CA/MSC) i mamy dostęp radiowy do niej (obszar pomarańczowy)). W sieci komórkowej mamy zmiany w obszarach pomarańczowych. 
 
 Więc w GSM:
 
 ![](img/31.png)
 
-Więc w GSM zmieniono tylko dół (czerwona pętla), bo zmieniło się medium transmisyjne (drut na radiowe fale). W sieci stałej to się wtykamy kablem i jest, a tu trzeba zrobić radiowy dostęp do drutu.
+Więc w GSM zmieniono (w stosunku do sieci telefonicznego kablowej) tylko dół (czerwona pętla), bo zmieniło się medium transmisyjne (drut na radiowe fale). W sieci stałej to się wtykamy kablem i jest, a tu trzeba zrobić radiowy dostęp do drutu.
 
- Wstawka o sygnalizacji
+Wstawka o sygnalizacji
 
 ### Sieć ISDN
 
-ISDN - Integrated Services Digital Network
+ISDN - Integrated Services Digital Network - system sieciowy z komutacją łączy dla telefonów. Transmitował dane oraz głos poprzez drut.
 
-PSTN - Public Switched Telephony Network
+PSTN - Public Switched Telephony Network - sieci telefoniczna, pozwalała na dołączanie się telefonów stacjonarnych. Jest od początku telefonii.
 
 W niej działały protokoły:
 
@@ -429,16 +440,18 @@ W niej działały protokoły:
 8. Jak CA otrzyma *ANM*, to wysyła *CONN* do TE usera1 co informuje, że drugi user odebrał i, że zestawiono już połączenie. 
 9. TE usera1 po odebraniu *CONN* wysyła tylko potwierdzenie odebrania w postaci *CONNACK*
 
+Tak to działało w sieci kablowej telefonicznej.
+
 #### Łącze między TE a CA od strony fizycznej
 
 W ISDN TE z CA było połączone:
 
-- dwoma **kanałami B**, który były kanałem rozmównym
+- dwoma **kanałami B**, które były kanałem rozmównym
   - Miały one przepływność `64kbit/s`
 - jednym **kanałem D**, służącym do sygnalizacji (czyli przez niego przepływały wiadomości protokołu DSS1)
   - Miał on przepływność `16kbit/s`
 
-I to wszytko bylo w jednym drucie telefonicznym. W warstwie elektrycznej podział na kanały reazlizował strumień bitów ramkonwanych i wnim były ramki, które nam wydzielały 2 kanały B i ramki od kanału D.
+I to wszystko było w jednym drucie telefonicznym. W warstwie elektrycznej podział na kanały realizował strumień bitów ramkowanych i w nim były ramki, które nam wydzielały ramki dla 2 kanałów B i ramki od kanału D.
 
 Z racji, że mamy dwa kanały B, to można naraz prowadzić 2 rozmowy, ale ktoś powie jak to dwie rozmowy na jednym telefonie?
 
@@ -450,9 +463,9 @@ Tak naprawdę to za tym TE były dopiero telefony i one były podłączone do TE
 
 Z pośród CT wydzielało się takie duże centrale i przy nich organizowało takie Punkty Transferu Sygnalizacji (takie jakby routery wiadomości sygnalizacyjnych), po to żeby ta sieć sygnalizacyjna, była nieco bardziej zagregowana (ofc nie screntralizowana), bo łatwiej tym zarządzać.
 
-No i ostatecznie sygnalizacja sieciowa (^na rys. czerwona) docierała między centralami pośrednio przez STP (czyli jak CA/CT chciało coś wysłać do innego CA/CT to to szło przez STP).
+No i ostatecznie sygnalizacja sieciowa (^na rys. czerwona) docierała między centralami pośrednio przez STP (czyli jak CA/CT chciało coś wysłać do innego CA/CT, to to szło przez STP).
 
-Sieć systemu sygnalizacji była reazlizowana w SS7 przez **MTP - Message Transfer Part** (usługa relatywnie podobna do IP). MTP to taka pseudo sieć pakietowa na potrzeby sygnalizacji.
+Sieć systemu sygnalizacji była realizowana w SS7 przez **MTP - Message Transfer Part** (usługa relatywnie podobna do IP). MTP to taka pseudo sieć pakietowa na potrzeby sygnalizacji.
 
 #### Protokoły sygnalizacyjne ISDN
 
@@ -485,7 +498,7 @@ Wiadomości DSS1 między TE i CA są przesyłane przez:
 
 Wymiana sygnalizacji i danych użytkownika wymagają zasobów, które w ogólności* są "wspólne" i trzeba nimi zarządzać w czasie rzeczywistym.
 
-*oprócz przypadku, że między TE i CA mamy BRA, gdzie jest dedykowany kanał D tylko na signalling.
+> *oprócz przypadku, że między TE i CA mamy BRA, gdzie jest dedykowany kanał D tylko na signalling.
 
 ***
 
@@ -511,13 +524,15 @@ Więc w jakich obszarach pojawiły się zmiany?
 
 ### Zmiany w usługach inteligentnych
 
+Mamy tu pojęcia z ISDN, i teraz jak to pozmieniać na rzecz GSM
+
 **SCP - Service Control Point** - punkt sterowania usługami, który jest serwerem (dostaje zapytania co robić ze zgłoszeniami o usługę i odpowiada)
 
 **SSP - Service Switching Point** - podrasowane centrale, które umieją takie zapytanie "co zrobić z danym zgłoszeniem, które jest w danej fazie z takimi paramsami" wysłać do SCP.
 
 > SCP może odpowiedzieć np. "obsługuj to zgłoszenie jakby nic się nie stało" lub "obsługuj to zgłoszenie, ale zmień nr docelowy na taki jaki ja Ci tu podstawiam"
 
-SCP służyła do sygnalizacji takich bardziej zaawansowanych usług jak przekierowanie numeró itp. natomiast w sieci GSM przyjęła ona formę takiej platformy **CAMEL - Customized Applications for Mobile networks Enhanced Logic**, która służyła wsparciu usług rozmównych i innych z uwzględnieniem roamingu abonentów (bo trzeba obiecane userowi usługi realizować też gdy jest za granicą). CAMEL działa tak, żeby jakiś rekord usługowy usera przewędrował z sieci macierzystej usera do miejsca, gdzie on jest za granicą.
+SCP służyła do sygnalizacji takich bardziej zaawansowanych usług jak przekierowanie numerów itp. natomiast w sieci GSM przyjęła ona formę takiej platformy **CAMEL - Customized Applications for Mobile networks Enchanced Logic**, która służyła wsparciu usług rozmównych i innych z uwzględnieniem roamingu abonentów (bo trzeba obiecane userowi usługi realizować też gdy jest za granicą). CAMEL działa tak, żeby jakiś rekord usługowy usera przewędrował z sieci macierzystej usera do miejsca, gdzie on jest za granicą.
 
 ## Co doszło w 2G do ISDN/SS7
 
@@ -529,21 +544,21 @@ Z punktu widzenia sterowania zgłoszeniami nic nowego się nie dzieje. (ofc wpro
 
 Dopiero w warstwach niżej zaczyna się coś dziać, no bo trzeba zamiast druta zrobić fale radiowe.
 
-Wcześniej (w ISND) Call Control (protokół DSS1) chodził bezpośrednio na data linku a to na jakimś fizycznym łączu. Teraz sprawa się komplikuje i sporo doszło ze względu na dostęp radiowy i mobilność w niższych warstwach. 
+Wcześniej (w ISND) Call Control (protokół DSS1) chodził bezpośrednio na data linku (na jakimś fizycznym łączu). Teraz sprawa się komplikuje i sporo doszło ze względu na dostęp radiowy i mobilność w niższych warstwach. 
 
-> Są to dość trudne aspekty i sprzężone ze sobą dają dość skomplikowane rozwiązania (i tak ogólnie jest, że pierwsze podejście do problemu nie zawsze jest najprostsze, z czasem ludzie lepiej go rozumieją i upraszaczają sieć (arch. i protokoły), ale wraz z postępem G dochodzą nowe wymagania na usługi, więc to nie jest tak, że każde kolejne G jest coraz prostsze ogólnie jest, ale są nowe usługi itp i to robi systemy bardziej złożonymi).
+> Są to dość trudne aspekty i sprzężone ze sobą dają dość skomplikowane rozwiązania (i tak ogólnie jest, że pierwsze podejście do problemu nie zawsze jest najprostsze, z czasem ludzie lepiej go rozumieją i upraszczają sieć (architektury i protokoły), ale wraz z postępem G dochodzą nowe wymagania na usługi, więc to nie jest tak, że każde kolejne G jest coraz prostsze. Ogólnie jest, ale są nowe usługi itp i to robi systemy bardziej złożonymi).
 
 # B1C1 GSM - Architektura  
 
 ![](img/20.png)
 
-Mamy część radiową **BSS** - **Base Station Subsystem** (teraz to się RAN nazywa w LTE i GeRAN w UMTS) i sieć stała(kablowa), która się nazywa **NSS - Network SubSystem** (w GSM i GPRS, a w wyższych standardach CORE Network, a w 5G "5G Core").  
+Mamy część radiową **BSS** - **Base Station Subsystem** (teraz to się RAN nazywa w LTE i GERAN w UMTS) i sieć stała(kablowa), która się nazywa **NSS - Network SubSystem** (w GSM i GPRS, a w wyższych standardach CORE Network, a w 5G "5G Core").  
 
 Część radiowa to zrobienie medium transmisyjnego, a cześć stała to pilnowanie tego medium i doniesieniem usług z perwspektywy klienta na styk sieci komórkowej, po to zeby ruch mógł wyjść "w świat". No bo sieć komórkowa robi dostęp do siecie publicznej, czy to Internet czy rozmówna publiczna. 
 
 NSS robi autentykacje, uwierzytelnienie.
 
-! Terminal u Użytkownik to są dwie różne rzeczy. Czym innym jest terminal, a czym innym SIM i człowiek. Mogę przełożyć SIM do innego terminala i still będzie działać. 
+! Terminal a Użytkownik to są dwie różne rzeczy. Czym innym jest terminal, a czym innym SIM i człowiek. Mogę przełożyć SIM do innego terminala i still będzie działać. 
 
 Dodatkowo sieć stała zapewnia dostępność usług w wymiarze ogólnoświatowym. Jak jadę do Francji, to chciałbym mieć roaming (tego nie zrobi lokalna sieć radiowa, to trzeba poziom wyżej, czyli sieć stała to robi)
 
@@ -571,11 +586,11 @@ VLR to informacje o wsystki abonentach, którzy akurat wpadli w obszar obłsugow
 
 **AuC - Authentication Center** - tu są klucze uwierzytelniające klientów.
 
-**EIR - Equipment Identity Register** - rejestr terminali. Nie wszystkich, ale tych które są jakoś specjalne, np. kradziony jest na zastrzeżonej liście albo z jakimś innym statusem i na tej podstawie pewne rzeczy można z nim zrobić a pewnych nie. Nie z Sim'em tylko z terminalem. Generalnie to żeby kradzione wrzucać na black list.Sieć sprawdza czy jest kradziony i jak jest to żadnej usługi nie wykona.
+**EIR - Equipment Identity Register** - rejestr terminali. Nie wszystkich, ale tych które są jakoś specjalne, np. kradziony jest na zastrzeżonej liście albo z jakimś innym statusem i na tej podstawie pewne rzeczy można z nim zrobić a pewnych nie. Nie z Sim'em tylko z terminalem. Generalnie to żeby kradzione wrzucać na black list. Sieć sprawdza czy jest kradziony i jak jest to żadnej usługi nie wykona.
 
 **G-MSC - Gateway MSC** - taki MSC na brzegu z sieciami innymi niż ta operatorska (albo publiczna albo operatorska innego operatora (roaming))
 
-> I taki schemat zachował się w kolejnych standardach. Jak rozumiemy to, to łatwiej nam ogarnąć te nowe G. Zmiany są głównie niskopoziomowe w radiu, bo inaczej się zasobami zarządza (inne częstotliwości, modulacje itp.) oraz sama pakietówka dużo zmian zrobiła.
+> I taki schemat zachował się w kolejnych standardach. Jak rozumiemy to, to łatwiej nam ogarnąć te nowe G. Zmiany są głównie niskopoziomowe w radiu, bo inaczej się zasobami zarządza (inne częstotliwości, modulacje itp.) oraz sama pakietówka dużo zmian narobiła.
 
 ## Jak przebiega połączenie
 
@@ -585,11 +600,13 @@ Spójrzmy jeszcze raz na ten rysunek
 
 **Um** - urządzenie mobilne.
 
+^Na czerwono sygnalizacja, a zielono kanały rozmówne.
+
 1. Um najpierw próbuje zarezerwować sobie kanał syngalizacyjny między nim a MSC.
 2. Następuje CAC (czyli komunikacja z HLR) jak wszystko ok, to międz Um a MSC jest kanał sygnalizacyjny (protokół DSS1). Tu jest CAC, ale też ustalenie szyfrowania dla danej rozmowy.
 3. Między Um a MSC powstaje kanał rozmówny.
 4. Teraz MSC zestawia połączenie przez sieć aż do ostatniego MSC (tego gdzie jest drugie Um)
-5. Teraz podobne procedury CAC (nie takie same lecz symetryczne) jak w 2. są wykonywane między dla Um2
+5. Teraz podobne procedury CAC (nie takie same lecz symetryczne) jak w 2. są wykonywane dla Um2
 6. Gdy 5. OK, to zestawiamy kanały między MSC a Um2
 
 ! Note that: krok 2. i 5. to abstrakcja, bo HLR jest przecież hierarhicznie rozproszone jako VLR.
@@ -600,7 +617,7 @@ Spójrzmy jeszcze raz na ten rysunek
 
 **Mobile Switching Center** - centrala abonencka sieci GSM.
 
-- Ma swój obszar obsługowy ograniczony zbiorem przypisanych BSS (Base Station Subsystem) stacji bazowych. Jedna BSS podle zawsze jednemu MSC.
+- Ma swój obszar obsługowy ograniczony zbiorem przypisanych BSS (Base Station Subsystem) stacji bazowych. Jedna BSS podlega zawsze jednemu MSC. Ale jedno MSC ma np. kilka obszarów przywołań, a co za tym idzie wiele BSS.
 
 - Użytkownicy pozostający w zasięgu MSC (podpięci do jednego z jego BSS) są zarejestrowani w VLR związanym z danym MSC
 
@@ -636,7 +653,7 @@ Spójrzmy jeszcze raz na ten rysunek
       - intra-MSC
         - czyli terminal przemieszcza się w ramach jednego MSC, ale pomiędzy sąsiednimi BSC - taki handover musi explicite wykonac MSC
       - inter-MSC 
-        - tu biorą udział nawet dwa MSC! Te między którymi terminal się przemieścił.
+        - tu biorą udział dwa MSC - te między którymi terminal się przemieścił.
 
 - Biling połączeń
 
@@ -646,7 +663,7 @@ Spójrzmy jeszcze raz na ten rysunek
 
 Na sieć operatorską jest co najmniej jeden rejestr HLR/AuC
 
-W tej bazie danych każdy abonent ma następujące wpisy: #Numery abonenta
+W tej bazie danych każdy abonent ma następujące wpisy (#Numery abonenta):
 
 - **MSISDN - Mobile Subscriber ISDN Number**
 
@@ -654,11 +671,11 @@ W tej bazie danych każdy abonent ma następujące wpisy: #Numery abonenta
     - jego format to CC + NDC + SN
       - **CC** - Country Code, **NDC** - National Destination Code (kod sieci operatora), **SN** - Subsriber Number
   - jest on publiczny, możliwy do zmiany
-  - inny niż numer sieciowy IMSI (ale podony z wyglądu)
+  - inny niż numer sieciowy IMSI (ale podobny z wyglądu)
 
 - **IMSI - Internaional Mobile Subscriber Identity**
 
-  - międzynarowody numer abonenta 
+  - międzynarodowy numer abonenta 
   - max 15 cyfr
   - unkiatowy globalnie na całym świecie
   - przypisany na sztywno do karty SIM, karta SIM nigdy innego nie będzie miała
@@ -672,7 +689,7 @@ W tej bazie danych każdy abonent ma następujące wpisy: #Numery abonenta
 
   - Chwilowy/ przejściowy identyfikator subskrybenta ruchomego
   - ten występuje w sygnalizacji bardzo często (IMSI występuje tak rzadko jak tylko można), zwłaszcza na styku radiowym to ten jest wykorzystywany IMSI tylko gdy nie da się inaczej.
-  - on jest losowany, możesz być zmieniany co chwilę przy każdej kolejnej sekwencji sygnalizacyjnej. Chodzi o to, że jak ktoś podsłucha ten numer to co mu z tego jak za minutę czy dwie on się zmieni 
+  - on jest losowany, może być zmieniany co chwilę przy każdej kolejnej sekwencji sygnalizacyjnej. Chodzi o to, że jak ktoś podsłucha ten numer to co mu z tego jak za minutę czy dwie on się zmieni 
   - jest zarządzany przez akutalny VLR
 
 - **MSRN - **Mobile Subscriber Roaming Number
@@ -692,6 +709,7 @@ W tej bazie danych każdy abonent ma następujące wpisy: #Numery abonenta
 - **Aktualny VLR** - VLR powiązany z MSC, w którym to obszarze usługowym jest user
 
 - **Lista usług** - lista usług dostępnych dla danego abonenta (te za które płaci i może ich oczekiwać)
+  
   - Są w tym usługi podstawowe (basic services):
     - telefon
     - SMS
@@ -723,8 +741,8 @@ Wszelki klucze do szyfrowania są wyliczane na podstawie kluczy Ki i jakiś zran
 
 Uwierzytelenie:
 
-- dla większości operacji wymaga się uwierzytelenienia karty SIM
-- np. zawsze przy zestawianiu kanału sygnalizacyjnego do sieic
+- dla większości operacji wymaga się uwierzytelnienia karty SIM
+- np. zawsze przy zestawianiu kanału sygnalizacyjnego do sieci
 
 Szyfrowanie:
 
@@ -734,7 +752,7 @@ Szyfrowanie:
 
 Ki jest na SIMIE i w AuC. 
 
-1. No i w początkowej fazie gdy termianl mówi do MSC, to wymeniany jest plain text (zero szyfrowania), ale tam korzystane jest z numerów TMSI, więc to info nie jest ważne dla hackerów. 
+1. No i w początkowej fazie gdy terminal mówi do MSC, to wymieniany jest plain text (zero szyfrowania), ale tam korzystane jest z numerów TMSI, więc to info nie jest ważne dla hackerów. 
 2. Teraz MSC odwołuje się do Auc o odesłanie takie trojki liczb (**auth tiplets**), które potem posłużą do wdrożenia szyfrowania na styku radiowym.
 3. Auc wylicza auth trplests, czyli -  **{RAND, SRES, Kc}**. Czyli jakaś liczba losowa, SRES - wyliczona na podstawie Ki i liczby losowej i Kc - klucz Kc (bo BTS musi tego używać a jest za głupi, żeby sobie to wyliczyć)
 4. MSC wysyła do termiana *auth triplets*
@@ -785,7 +803,7 @@ Zapytania do EIR są dozwolone w dowolnych momentach podczas akutalizacji poło�
 
 ## Usługa SMS
 
-Założona, że SMS to 160 oktetów, więc zastanowiono się czy potrzebny jest w ogóle zestawianie kanału, dojdzięto do wniosku, nie ma co tego prowadzić kanałem rozmównym i dlatego:
+Założono, że SMS to 160 oktetów, więc zastanowiono się czy potrzebny jest w ogóle zestawianie kanału, dojdzięto do wniosku, nie ma co tego prowadzić kanałem rozmównym i dlatego:
 
 SMS w sieci radiowej jest przekazywany kanałem sygnalizacyjnym, a nie kanałem rozmównym. W ISDN nie było SMS'ów.
 
@@ -852,7 +870,7 @@ Skoro mamy podział na "**komórki**", to jak zwielokrotnić i dzielić między 
       >
       > Teraz jest pytanie jaka jest aktywność userów. W tamtych czasach przyjmowało się 50mili Erlangów*, 
       >
-      > > *Erlang - jednostka natężenie ruchu telekomunikacyjnego. Dla danego systemu telekomunikacyjnego składającego się z 1 linii, i czasu obserwacji równego 1 godzinie (60 minut), jeśli linia ta zajęta jest cały czas przez pełną godzinę, to natężenie ruchu wynosi 1 erlang; odpowiednio, jeśli linia ta zajęta jest przez 30 minut, natężenie to wynosi 0,5 erlanga.
+      > > *Erlang - jednostka natężenia ruchu telekomunikacyjnego. Dla danego systemu telekomunikacyjnego składającego się z 1 linii, i czasu obserwacji równego 1 godzinie (60 minut), jeśli linia ta zajęta jest cały czas przez pełną godzinę, to natężenie ruchu wynosi 1 erlang; odpowiednio, jeśli linia ta zajęta jest przez 30 minut, natężenie to wynosi 0,5 erlanga.
       >
       > Czyli, średnio user rozmawia przez 2/100 jego czasu, czyli 1/50
       >
@@ -973,10 +991,10 @@ Btw co widzi termianl w kroku 2.
 
 - Sterowanie mocą i wyprzedzeniem transmisji terminala przez BSS
   - Chcemy optymalizować moc sygnału u terminala i stacji bazowej. Jak za duża to marnujemy energię i pasmo, a jak za mało to błędy mogą być 
-  - wyprzedzeniem transmisji terminala, co to?
+  - **wyprzedzenie transmisji terminala**, co to?
     -  Chodzi o to, że już przy tak małych częstotliwościach odległość terminala od stacji bazowej ma znaczenie i pojawia się pytanie czy pakieciki wysłane przez terminal zmieszczą się w szczelinie czasowej spodziewanej po stronie stacji. Czyli trzeba ogarnąć, żeby się szczelinki czasowej nie rozkraczyły i pakiety nie pomieszały
 - "czytanie" pobliskich stacji bazowych i informowanie własnego BSS o nich na okolczności zmiany stacji bazowej (BSS - stacja bazowa)
-- obłsuga zmiany obszaru przywołań 
+- obsługa zmiany obszaru przywołań 
   - mobilność podczas nieaktywności terminala 
   - **handover** - mobilność podczas aktywności terminala
 
@@ -986,7 +1004,7 @@ Stąd uogólniając radiowe zasoby transmisyjne:
 
 - służą celom obłsugi mobilności nomadycznej i twardej (czyli podczas rozmowy)-  tzw. handover (w 3GPP - **mobility management**)
 - służą celom usługowym ofc. czyli SMS, głos, fax, przekierowanie połączenia*
-- służą celom sygnalizacyjnym usług użytkowych (w 3GPP - **call management** (call controll))
+- służą celom sygnalizacyjnym usług użytkowych (w 3GPP - **call management** (call control))
 - same podczas realizacji 3 powyższych wymagają skoordynowanego zarządzania nimi ( w 3GPP - **radio resource management**)
 
 
@@ -1017,13 +1035,13 @@ Czyli grupa kanałów, że terminal zorientował się co się dzieje wokół nie
 
 ##### Kanały wspólne - CCH
 
-Terminal w stanie spoczyku tylko słucha, jak chce sam coś zadzownić to musi sieć poprosić o zasoby.
+Terminal w stanie spoczyku tylko słucha tych kanałów, jak chce sam coś zadzownić to musi sieć poprosić o zasoby.
 
 |          Kanał logiczny          |                       Funkcje zadania                        |
 | :------------------------------: | :----------------------------------------------------------: |
-|     **PCH** - Paging Channel     | informowanie terminala o **konieczności podjęcia komunikacji**, gdy przyczna leży po stonie **sieci** (ktoś do nas dzwoni), a terminal jest w spoczynku i nie jeszcze przyznanych zasobów radiowych |
-| **RACH** - Random Access Channel | informowanie sieci przez terminal o **konieczności podjęcia komunikacji**, gdy przyczna leży po stonie **terminala** (my do kogoś dzwonimy), a terminal jest w spoczynku i nie jeszcze przyznanych zasobów radiowych |
-| **AGCH** - Access Grant Channel  | **info o przyznanym terminalowi kanale sygnalizacyjnym**<br />- wyodrębenienie zasobu sygnalizacyjnego na wyłączny użytek terminala, autoryzowane i koordynowane centralnie |
+|     **PCH** - Paging Channel     | informowanie terminala o **konieczności podjęcia komunikacji**, gdy przyczyna leży po stronie **sieci** (ktoś do nas dzwoni), a terminal jest w spoczynku i nie jeszcze przyznanych zasobów radiowych |
+| **RACH** - Random Access Channel | informowanie sieci przez terminal o **konieczności podjęcia komunikacji**, gdy przyczyna leży po stronie **terminala** (my do kogoś dzwonimy), a terminal jest w spoczynku i nie ma jeszcze przyznanych zasobów radiowych |
+| **AGCH** - Access Grant Channel  | **info o przyznanym terminalowi kanale sygnalizacyjnym**<br />- wyodrębnienie zasobu sygnalizacyjnego na wyłączny użytek terminala, autoryzowane i koordynowane centralnie |
 
 Po otrzymaniu zasobów terminal z siecią komunikuje się za pomocą następnej grupy kanałów logicznych - kanały dedykowane
 
@@ -1036,7 +1054,7 @@ Po otrzymaniu zasobów terminal z siecią komunikuje się za pomocą następnej 
 |   **FACCH** - Fast Assocaited Control Channel    | przełączenie BTS w trakcie trwania komunikacji (**handover**)<br />- wymóg: szybka reakcja, przełączenie niezauważalne dla usera |
 |            **TCH** - Traffic Channel             | strumienie głosowe lub strumienie danych userów<br />- **transfer danych głosowych** lub transmisji danych (poza SMS)<br />- ten co zajmuje nawięcej pasma<br />- to po to tak naprawdę to wszystko jest |
 
-> Jedna kanały są wiekszę jedne mniejsze. Z niektórych korzystamy krótko a nie które pochłaniają dużo szczelin czasowych. To ile miejsca w strumieniu szczelinowym przeznaczymy na kanały to zależy od tego jaki jest profil ruchu (ile jest sygnalizacji, ile rozmów), te parametry pływają (constant changes) i później zobaczymy, że kanały logiczne można reazlizować fizycznie na wiele sposobów w zależności ile danego kanału logicznego w tej chwili potrzeba. Ofc. nie ma dowolki, są jakieś wzorce ile co na co przyjmować itp.
+> Jedne kanały są większe inne mniejsze. Z niektórych korzystamy krótko .a niektóre pochłaniają dużo szczelin czasowych. To ile miejsca w strumieniu szczelinowym przeznaczymy na kanały  zależy od tego jaki jest profil ruchu (ile jest sygnalizacji, ile rozmów), te parametry pływają (constant changes) i później zobaczymy, że kanały logiczne można realizować fizycznie na wiele sposobów w zależności ile danego kanału logicznego w tej chwili potrzeba. Ofc. nie ma dowolki, są jakieś wzorce ile co na co przyjmować itp.
 
 #### Kanały rozgłoszeniowe
 
@@ -1050,7 +1068,7 @@ W domenie czasowej mamy taki wzorzec, że co 4.6ms pojawia się przez 575us sinu
 
 ![](img/52.png)
 
-Jak ten peak jest stabilny (to jest analogowe, więc łatwo wykryć), to terminal odejmuje od tego 67.6kHz i jak wynik mieści się w szeregu nośnych jakie standard przewiduje, to wie że znalazł kanała FCCH i z niego będzie mógł odczytywać dalsze parametry tej stacji bazowej.
+Jak ten peak jest stabilny (to jest analogowe, więc łatwo wykryć), to terminal odejmuje od tego 67.6kHz i jak wynik mieści się w szeregu nośnych jakie standard przewiduje, to wie że znalazł kanał FCCH i z niego będzie mógł odczytywać dalsze parametry tej stacji bazowej.
 
 No i terminal sprawdza sobie takie peaky i na tej podstawie łapie listę stacji bazowych. 
 
@@ -1070,7 +1088,6 @@ Terminal wie, że kanał FCCH jest na kratce 0, i że za ileś kratek znajdzie k
 >
 > więc musimy znać numeracje tych dni, tygodni, miesięcy w skali roku I OD TEGO JEST KANAŁ SCH
 >
-> 
 
 Zawiera on:
 
@@ -1082,7 +1099,7 @@ W FCCH była info analogowa, tu już jest binarna.
 
 ##### BCCH - Broadcast Common Control Channel
 
->  Struktura wieloramki odzwierciedla rytm udostępnianych przez stację bazową informacji i w szczególności są tam informacje systemowe, które są rozsiewane na tzw. kanale broadcastowym
+>  Struktura wieloramki odzwierciedla rytm udostępnianych przez stację bazową informacji i w szczególności są tam informacje systemowe, które są rozsiewane na BCCH
 > i w tym kanale są informacje niektóre rozsyłane w trybie tygodniowym, niektóre miesięcznym a inne rocznym
 > są to tak zwane **bloki informacyjne (System Information)**
 
@@ -1102,13 +1119,13 @@ Kanał ten zawiera szereg informacji o stacji bazowej:
 
 ![](img/54.png)
 
-**Cell identity** - loka,nie unikatowy identyfikator komórki (Global CI = CI + LAI)
+**Cell identity** - lokalnie unikatowy identyfikator komórki (Global CI = CI + LAI)
 
 **Location Area Id** - MCC + MNC + LAC
 
 **Channel Description** - opis struktury kanałów sterujących (żeby wiedzieć, gdzie je znajdować)
 
-**RACH Control Param** - info jak jest udostępniany, jak wygląda *Random Access Channel*, jak się do niego dostać (no bo to jest punkt wejściowy do usługi), jakie ma parametry itp.
+**RACH Control Param** - info jak jest udostępniany kanał RACH, jak wygląda *Random Access Channel*, jak się do niego dostać (no bo to jest punkt wejściowy do usługi), jakie ma parametry itp.
 
 **Neighbor Cells Des** - opis sąsiednich komórek, pojawia się on w blokach często, bo jak user gada, to musimy mu mówić jakie komórki on powinien dookoła nasłuchiwać i przesyłać do stacji bazowej raporty o nich na potrzeby handover'u. Tę informację należy rozsiewać tym terminalom, które gadają
 
@@ -1122,17 +1139,17 @@ Kanał ten zawiera szereg informacji o stacji bazowej:
 
 **Kanał częstotliwościowy** - nośna o szerkosoći 200kHz, w którym zorganizowana jest trasmisja okienek ("slotów") o długości 577us
 
-**Kanał fizyczny TDMA (Time Slot (TS))** - tworzony przez cykliczny ciąg (modulo 7) okienek przypisanych temu kanałowi, przeplecionych z innymi okiekankami czasowymi. Czyli naprzykład mamy Time Slot tworzony z okienek o numerze 4,
+**Kanał fizyczny TDMA (Time Slot (TS))** - tworzony przez cykliczny ciąg (modulo 7) okienek przypisanych temu kanałowi, przeplecionych z innymi okienkami czasowymi. Czyli na przykład mamy Time Slot tworzony z okienek o numerze 4,
 
-**Kanał logiczny** - przepływ informacji określonego typu w ramach TS
+**Kanał logiczny** - przepływ informacji określonego typu w ramach Time Slotu
 
-- realizowany z użyciem określonego pozdbioru okienek kanały fizycznego
+- realizowany z użyciem określonego podzbioru okienek kanały fizycznego
 
-- określony przez zarezerwowanie określoncyh okienek (lub sekwencji okienek grupowanych po kilka) w ramach danego TS
+- określony przez zarezerwowanie określonych okienek (lub sekwencji okienek grupowanych po kilka) w ramach danego Time Slotu
 
-- sekwencja (pozycje) okienek tworzących kanał logiczny musi być znana prez temrinal i BTS; może być predefiniowana lub ustalona dynamiczenie wg reguł
+- sekwencja (pozycje) okienek tworzących kanał logiczny musi być znana perz terminal i BTS; może być predefiniowana lub ustalona dynamicznie wg reguł
 
-  - > bo opisano ileś standardów pakowania kanałów logicznych w fizyczne i stacja może powiedzieć do terminala "ej, stosujemy układ nr 7" i terminal wie jakie kanały logiczne jaki idą po sobie na jakich kanałach fizycznych
+  - > bo opisano ileś standardów pakowania kanałów logicznych w fizyczne i stacja może powiedzieć do terminala "ej, stosujemy układ nr 7" i terminal wie jakie kanały logiczne jak idą po sobie na jakich kanałach fizycznych
 
 - > np. my mówimy, że grupa czterech kolejnych okienek o numerze 2 powtarzająca się co 20 to jest nasz kanał logiczny, on będzie miał jakąś przepływność tam, co prawda będzie taki szarpany ale to nic
 
@@ -1140,7 +1157,7 @@ Kanał ten zawiera szereg informacji o stacji bazowej:
 
 - > W te okienka/sloty trwające 577us możemy wpisywać bursty
 
-- fizyczna zawartość okienkta ("burst" mieście się w okienku)
+- fizyczna zawartość okienka ("burst" mieści się w okienku)
 - konkretna paczka przenosi informację jednego kanału logicznego
   - no bo różne kanały potrzebują innej formy pakietów
 - zróżnicowane wymogi typów kanałów logicznych ==. różne typy (formaty paczek)
@@ -1163,9 +1180,9 @@ Typy burstów są wymienone na rysunku poniżej.
 
 ![](img/56.png)
 
-Zauważmy. że bursty są nieco krótsze niż czas okienka. Ten nieużywany okres to tzw. **guard period**, żeby mieć pewność że okienka na siebie nie nachodzą (to nawiżauje do tzw. *wyprzedzenia terminala*)
+Zauważmy. że bursty są nieco krótsze niż czas okienka. Ten nieużywany okres to tzw. **guard period**, żeby mieć pewność że okienka na siebie nie nachodzą (to nawiązuje do tzw. *wyprzedzenia terminala*)
 
-*Na rysunku długości burstów są podane w bitach, więc przelicamy sobie, że jeden bit to trwa ileś tam sekundy
+*Na rysunku długości burstów są podane w bitach, więc przeliczamy sobie, że jeden bit to trwa ileś tam sekundy
 
 **training sequence** - to jest wzorzec znany terminalowi i stacji bazowej. I te urządzenia rozpoznają jak ta sekwencja została zniekształcona i po tym potrafi sobie skorygować odbiornik,  żeby zmniejszyć p-stwo błędów w odbiorze.
 
@@ -1175,7 +1192,7 @@ W **Frequency Correction Burst**, czyli tej analogowej dla kanału FCCH mamy prz
 
 ![](img/57.png)
 
-W **Access Burst** jest bardzo krótki, bo tam terminal mówi tylko "Hej, dajcie mi dostęp do jakiejś sekwencji okienek, żebym sobie mógł pogadać z kimś". Przerwa jest dlatego taka długa, zeby nie zakłócić innych stacji bazowych (nie wyleźc poza swój czas). Tak długi *guard time*, daje gwarancje, ze terminal znajdują się teoretycznie w odległości `37.8km`, to to okienko dotrze na czas i nie zakłóci tramisji innego terminala.
+**Access Burst** jest bardzo krótki, bo tam terminal mówi tylko "Hej, dajcie mi dostęp do jakiejś sekwencji okienek, żebym sobie mógł pogadać z kimś". Przerwa jest dlatego taka długa, żeby nie zakłócić innych stacji bazowych (nie wyleźć poza swój czas). Tak długi *guard time*, daje gwarancje, ze terminal znajdują się teoretycznie w odległości `37.8km`, to to okienko dotrze na czas i nie zakłóci transmisji innego terminala.
 
 >  Z tego wynika wymóg na komórki, że nie powinny one mieć większego promienia niż 37.8 km (ustaliło się, że podręcznikowo 35km to jest granica).
 
@@ -1202,14 +1219,14 @@ I te kierunki są asymetryczne, bo np. kanał FCCH jest tylko down-link. Tak sam
 
 **^Downlink TS 0**
 
-Na TS 0 i 1 mogą być kanały sygnalizacyjnego. Mogą być kanały rozmówne, ale gdy nie ma kanałów sygnalizacyjnych. 6 pierwszych ramek w wieloramce TS 0 zajmują kanał FCH, SCH i 4x BCCH. **Wieloramka** - to 51 ramek. BCCH powtarza się co wieloramke, a FCCH i SCH powtarzają się co 10 ramek.
+Na TS 0 i 1 mogą być kanały sygnalizacyjne. Mogą być kanały rozmówne, ale gdy nie ma kanałów sygnalizacyjnych. 6 pierwszych ramek w wieloramce TS 0 zajmują kanał FCH, SCH i 4x BCCH. **Wieloramka** - to 51 ramek. BCCH powtarza się co wieloramke, a FCCH i SCH powtarzają się co 10 ramek.
 
 Na TS-0 pojawiają się również kanały SDCCH. Jak terminal dostanie możliwość prowadzenia sygnalizacji na potrzeby usługi, to na własność dostaje taki jeden umowny slot (np. na rysunku te 4x `SDCCH 0`) jakoś tam powtarzalny w kolejnych wieloramkach. 
 
 Jest też dla slotów kanału SDCCH dla danego terminala skojarzony slot kanału SACCH, który moniture kanał SDCCH, na potrzeby ewentualnego handover'u.
 
 > Czyli jak widać nie tylko rozmowy można handoverować.
-> Czy handovery kanału sygnalizacyjnego są często? Raczej nie, ale no sygnalizacja trochę trwa podczas zestawiania połączenia przez sieć (kilka czy kilkanaście sekund czasami), no więc ja jadąć samochodem, to możliwe, że zmienię komórkę.
+> Czy handovery kanału sygnalizacyjnego są często? Raczej nie, ale no sygnalizacja trochę trwa podczas zestawiania połączenia przez sieć (kilka czy kilkanaście sekund czasami), no więc ja jadąc samochodem, to możliwe, że zmienię komórkę.
 
 **^Downlink TS 1**
 
@@ -1244,16 +1261,15 @@ Odworowanie kanałów musi być jednakowe!!!
 
 - **Radio Resource Management - RR**
   - głównie w relacji MS <==> BSC (jednak przyczyny/skutki często na styku BSC <==> MSC)
-  - zarządzanie na poziomie kanałów logicznych (przydział zasobów/kanałów strumieniomi informacji, handover)
+  - zarządzanie na poziomie kanałów logicznych (przydział zasobów/kanałów strumieniom informacji, handover)
 
 - **Mobility Management - MM**
-
   - zasadniczo w relacji MS <==> MSC
   - zarządzanie położeniem MS, rejestracja terminala, uwierzytelnienie usera
   
 - **Call Control - CC** / **Call Management - CM**
-  - wyłączenie MS <==> MSC (opórcz *classmark*)
-  - zarządzenie procedurami usługowymi (własciwe usługi telekomunikacyjne)
+  - wyłączenie MS <==> MSC (oprócz *classmark*)
+  - zarządzenie procedurami usługowymi (właściwe usługi telekomunikacyjne)
 
 ### Architektura funkcjonalna sterowania z perspektyty terminala
 
@@ -1261,7 +1277,7 @@ Odworowanie kanałów musi być jednakowe!!!
 
 **Usługi aplikacyjne** - to na przykład aplikacja od SMS'ów, która zajmuje się również wyświetlaczem, odbieraniem danych od usera, ubiera jakoś tego SMS'a i kieruje się do **Call mgmnt** - trudni się wysłaniem SMS'a bez wnikania w to dlaczego akurat w tym momencie mamy to zrobić.
 
-**CC** i **MM** to takie watstwy wysokiego poziomu. Poniżej nich są warstwy im służebne - **RR** i **Dm** (Data Link Layer), które mają zorganizowac im zasoby no i wreszcie warstwa **Physical layer**. Każda warstwa do black box.
+**CC** i **MM** to takie warstwy wysokiego poziomu. Poniżej nich są warstwy im służebne - **RR** i **Dm** (Data Link Layer), które mają zorganizować im zasoby no i wreszcie warstwa **Physical Layer**. Każda warstwa dla każdej innej to black box.
 
 **RR** decyduje **co my przesyłamy**, jakiego typu sygnalizacje przesyłamy i ze względu na typ sygnalizacji (czy to będzie CC czy MM, bo RR ma świadomość jakiego typu payload dostaje na styku, łatwo rozpoznać stukturę ramek (nie ma jakiejś super enkapsulacji)). Potem **RR** mówi do **Data Link Layer** **jak należy to przesłać**.
 
@@ -1297,7 +1313,7 @@ Następnie **Data Link Layer** określa **którędy (jakie kanały) przesyłamy*
 
 **Call clearing** - zerwanie połączenia
 
-**Call information phase** - modyfikacja paramsów połączenie podczas jego trwania
+**Call information phase** - modyfikacja paramsów połączenia podczas jego trwania
 
 ### Rozproszenie warstw pomiędzy węzły
 
@@ -1320,7 +1336,7 @@ Terminal prosi o  kanał SDCCH, a sieć mu takowy przydziela. Na tym kanale będ
 
 **Faza 2:**
 
-Dochodzi do ustanowienia łącza L2 między terminalem a siecią (Data Link).  Czyli od tego momentu terminal i sieć mogą przeprowadzić komunikację, któa jest niezawodna, zabezpieczone przed błędami itd. zgodnie z paradygmatem L2.
+Dochodzi do ustanowienia łącza L2 między terminalem a siecią (Data Link).  Czyli od tego momentu terminal i sieć mogą przeprowadzić komunikację, która jest niezawodna, zabezpieczona przed błędami itd. zgodnie z paradygmatem L2.
 
 **Faza 3 i Faza 4:**
 
@@ -1330,7 +1346,7 @@ uwierzytelnienie i jak git to aktywujemy szyfrowanie (bo zaraz będzie rozmowa).
 
 Faza usługowa. Został użyty termin *transakcji*, żeby nie skupiać się tylko i wyłącznie na rozmowach tel., ale też SMS, location update itp.
 
-No bo niezależnie jaka to będzie usługa (czy SMS, czy rozmowa, czy locatio update) kroki przez są generyczne i takie same
+No bo niezależnie jaka to będzie usługa (czy SMS, czy rozmowa, czy location update) kroki przez są generyczne i takie same
 
 **Faza 6:**
 
@@ -1412,7 +1428,7 @@ Usługi:
   - RACH, żeby dostać kanał sygnalziacyny
   - AGCH, gdzie dostajemy informacje o przyznanym kanale sygnalizacyjnym
   - SDCCH, to jest nasz dostanięty kanał sygnalizacyjny i znim skojarzony SACCH i prowadzimy tą aktualizację położenia, jak skończymy procedura location update to kanały zostają zwolnione
-- b) poączenie telefocznie (inicjalizowane przez terminal)
+- b) połączenie telefocznie (inicjalizowane przez terminal)
   - początek jak w a)
   - potem wykorzystujemy 1 strumień, czyli TCH, a na nim podkradkiem zorganizowane jeszcze FACCH, i SACCH.
 - c) może być tak, że między terminalem a siecią istnieje kanał TCH (z racji jakiś tam specjalnych usług nie został rozłączony) i terminal chce połączenie tel.
@@ -1434,7 +1450,7 @@ to dla dociekliwych
 
 1)
 
- Terminal w kanale losowym RACH (bo terminal losuje który dokładnie RACH wykorzysta(jest ich kilknaście)) wysysła wiadomość **Channel Request**.
+Terminal w kanale losowym RACH (bo terminal losuje który dokładnie RACH wykorzysta(jest ich kilkanaście)) wysysał wiadomość **Channel Request**.
 
 W wiadomości **Channel request** jest przekazywany identyfikator terminala, po to że jak sieć na kanale AGCH (Access Granted Channel) przyznając danego terminalowi kanał SDCCH, to z racji, że AGCH jest kanałem wspólnym, to odbierze to każdy terminal i będzie się zastanawiał czy to jest do mnie, więc trzeba te odpowiedzi jakoś identyfikować. 
 
