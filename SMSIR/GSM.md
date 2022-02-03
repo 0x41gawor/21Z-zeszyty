@@ -1574,3 +1574,19 @@ Slajdy do tego działu.
 
 ![](img/79.PNG)
 
+### Multipleksacja w GSM
+
+Są aż 4:
+
+- przestrzenna
+- uplink , downlink
+- nośne z jednego BTS
+- czasowa kanałów fizycznych
+
+**Przestrzenna** w skali kraju, bo tych samych zasobów (częstotliwości) można użyć w wielu miejsca, by były odpowiednio daleko od siebie te komórki
+
+**Uplink , downlink** - inne pasma częstotliwości są używane w transmiji od terminala, a inne do terminala. 
+
+**Nośne z jednego BTS** - z kolej te pasma w ramach jednego BTS są podzielone np. na 3 nośne z jakimś odstępem
+
+**Czasowa kanałów fizycznych** - no i na końcu na tych nośnych robione są timesloty, które organizowane są w ramki, i dany time slot to kanał fizyczny, a jakaś struktura wieloramki, to kanał logiczny i w te timesloty można wkładać bursty

@@ -6,6 +6,8 @@ GPRS - General Packet Radio Service
 
 EDGE - Enchanced Data rates for GSM Evolution
 
+- Taki poprawiony GPRS
+
 UMTS - Universal Mobile Telecommunications System
 
 HSPA - High Speed Packet Access
@@ -23,6 +25,10 @@ BTS - Base Transceiver Station -  *wireless* komunikacja pomiędzy MS, a siecią
 BSC - Base Station Controller - *handling traffic* i sygnalizacja pomiędzy terminalem i *network switching subsystem'em*, szafa komutacyjna
 
 PCU - Packet Control Unit - dodany wraz z GPRS, wyręcza BSS w taskach związanych z pakietówką
+
+
+
+FDD - Frequency Division Duplex, komórka używa dwóch zakresów częstotliwości, jeden do up-link, drugi do down-link
 
 ### CORE
 
@@ -44,6 +50,8 @@ AuC - Authentication Center
 
 EIR - Equipment Identity Register 
 
+
+
 ## 3G
 
 UTRAN - UMTS Terrestial Radio Acces Network - w UMTS RAN zmienił nazwę.
@@ -62,7 +70,7 @@ WCDMA - Wideband Code-Division Multiple Access - technika wielodostępu terminal
 
 WiMAX - jakaś oddzielna technologia sieci komórkowych, która mogła zastąpić UMTS, GSM, GPRS, ale tego nie zrobiła
 
-### LTE
+## LTE
 
 Evolved RAN - RAN wprowadzony w LTE
 
@@ -87,3 +95,4 @@ ICIC - Inter-Cell Interference Coordination - technika koordynująca interferenc
 MIMO - Multi-Input Multi-Output - technika kształtowania wiązki (że nie kulista, tylko celuje w terminale), multipleksacja
 
 LTE4dvanced - inkrementacja LTE.
+
