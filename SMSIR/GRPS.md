@@ -471,3 +471,212 @@ No i na końcu są już te potwierdzenie na PACCH.
 
 >  To że sieć wskazuje dokładnie w który blok terminal może wpisywać swoje dane (chodzi tu o ten USF), to się ciągnie aż do 5G.
 
+## Obsługa mobilność i sieć rdzeniowa
+
+Nasz obszar zainteresowania.
+
+<img src="img2/28.png" style="zoom:75%;" />
+
+SGSN terminuje zakończenia warsty LLC, między MS a SGSN, a jednocześnie tworzy tunele GTP z węzłem GGSN. 
+
+### SGSN, GGSN
+
+#### SGSN
+
+- przesyła pakiet do/z MS w jego obszarze usługowym
+- funkcje attach/detach
+- uwierzytelnienie MS
+- zarządzanie kanałami logicznymi na zasobie radiowym
+- **location register** węzła SGSN przechowuje:
+  -  info lokalizacyjne (aktualna komórka, aktualny VLR) terminala
+  - profile zarejestrowanych userów w GPRS (np. IMSI, przyznany adres w sieci pakietowej)
+
+#### GGSN
+
+- styk do zewnętrznych sieci pakietowych (np. Internet)
+- w ramach procedury *Attach* nadaje terminalowi publiczny adres IP
+- dekapsulacja tuneli GTP z SGSN do formatu IP i wysłanie pakietów IP do sieci publicznej
+  - w kierunku downlink na odwrót
+
+
+
+### Kluczowe aspekty sieci rdzeniowej
+
+<img src="img2/29.png" style="zoom:75%;" />
+
+### Mobilność
+
+#### Routing Area 
+
+![](img2/30.png)
+
+W GSM był koncept obszaru przywołań (Location Area), który był zbiorem komórek. Terminal rejestrował swoją obecność w danym obszarze i sieć mogła go szybko znaleźć jak ktoś dzwonił.
+
+W pakietówce takich przywołań termianala, żeby zarezerwować dla niego zasoby, bo ma coś do pobrania z sieci jest dużo więcej niż w głosówce.
+
+> Dzwoni ktoś do Ciebie max kilka razy dziennie, a takie apki internetowe, to co chwila coś przychodzi.
+
+Więc ruch sygnalizacyjny, pagingowy byłby strasznie duży w GPRS i to mogłoby zatkać całą sygnalizację, więc w GPRS postanowiono zmniejszyć obszary przywołań do obszaru **Routing Area (RA)**. I teraz terminal każdorazowo rejestruje zmiany RA.
+
+> Optymalniej jest wtedy po prostu wyszukiwać terminal pagingiem nie na wiele komórek (jak to było w LA), tylko na kilka (jak to jest w RA). Nawet jeśli odbywa się to kosztem nieco częstszego updatowania przez terminal swojego położenia.
+
+#### Cell reselection
+
+Pamiętamy, że rezerwacji zasobów w pakietówce dokonuje się na każdy pakiet aplikacyjny osobno, więc jest ich mnóstwo. I gdyby każda rezerwacja downlink miała by się odbywać za pomocą pagingu, no to tego ruchu sygnalizacyjnego byłoby niemożliwe dużo. Więc w GPRS, zdefiniowano coś takiego jak **aktywna reselekcja komórki.**
+
+> W GSM terminal nic nie robiąc (monitorując, czekając na połączenie rozmówne czy SMS), no i sprawdza czy komórka, która teraz mu służy, czy nadal sygnał jest git, i jak jakoś spadła i jest jakaś inna, lepsza, termianl mówi do siebie, "gdyby teraz do mnie dzwoniono, to ja się pagingiem odezwę teraz na tej, a nie na tamtej" i to jest **Pasywna reselekcja komórki**.
+
+Natomiast w GPRS do tego mówienia sobie "ok, teraz po pagingu będe się zgłaszał poprzez tę nową komórkę" dodano jeszcze, że podczas transmisji, aktywnym (czyli nie w czasie czekania) oprócz do siebie, to mówi to jeszcze do sieci.
+
+Zwykłe GSMowe pasywne cell reselection sygnalizacji nie zawierało, terminal monitorował FCCH i stwierdzał sobie sam, że zmienia. Natomiast tu już jest sygnalizacja **Cell Update**, bo terminal mówi do sieci o zmianie komórki.
+
+> Cell reselection to bodajże główna (choć nie jedyna) przyczyna wpowadzenia "drugiej L2" w postaci LLC
+
+> btw. w LTE (a właściwie już od 3G) nie ma terminalowych cell reselection/update - o zmianach decyduje sieć, terminal tylko śle informacje monitoringowe i to sieć decyduje, że trzeba przepiąć dany terminal, czyli następuje powrót do GSMowego handoveru (tylko w GPRS terminal inicjuje przepięcie).
+
+#### Cykl życia terminala
+
+![](img2/31.png)
+
+Terminal może znajdować się w 3 stanach:
+
+- IDLE
+- READY
+- STANDBY
+
+I w każdym jest inny zestaw akcji dozwolonych i niedozwolonych.
+
+IDLE
+
+Terminal jest wyłączony/nie ma sim (sieć nie wie, że takowy istnieje). Jak się włączy telefon, to on sobie odczytuje FCCH, potem BCCH/PBCCH i wybiera stacje bazową. Po pewnym czasie może zdecydować się podłączyć do sieci pakietowej (czyli jak my klikniemy, żeby się włączył "transfer danych"), wtedy terminal wykona **GPRS Attach** (dostanie IP i wgl), no ale jak coś to po samym Attach terminal nie ma żadnych zasobów zarezerwowanych na transfer. Jak odpalimy jakąś apkę, która będzie chciała przesłać pakiet (lub sieć nam będzie chciała przesłać pakiet), to dokona się rezerwacja zasobów (potworzą się te tunele, czyli kontekst PDP) i telefon jest w stanie READY. W tym stanie następuje też samo przesyłanie danych (Temporary Block Flow'ów). Natomiast jak ustanie transmisja pakietów na 44 sekundy to telefon przechodzi w stan STANDBY, kontekst PDP jest kasowany. Jak znowu coś będzie do przesłania to, znowu READY, jak nie to STANDBY i tak w kółko, aż user kliknie na terminalu wyłączenie transferu danych (lub STANDBY będzie trwało zbyt długo) i telefon zrobi **GPRS detach** wyrejestrowując się z sieci publicznej pakietowej i terminal przyjdzie w IDLE.
+
+![](img2/32.png)
+
+^Na rysunku po GPRS Attach jest od razu przejście w stan READY, bo to jest w praktyce tak, że jak podłączymy, się do sieci publicznej, to apki zaczną coś wysyłać, więc stan IDLE po GPRS Attach jest bardzo krótki.
+
+#### Stany terminala, a mobilność
+
+Stan IDLE, to nudy. Stan READY i STANDBY są ciekawe i różnią się w szczególności tym w jaki sposób sieć obsługuje terminal w razie ruchu przychodzącego.  Jeśli terminal jest w stanie:
+
+- READY, czyli prowadzi transmisje (up czy down), więc co chwila są tworzone TBFy, więc wymagana jest płynność, więc jeśli w tym stanie terminal dokonuje zmiany komórki **Cell Update**, to on na szybko wstrzeliwuje się z dodatkową sygnalizacją i notifuje sieć, że zmienił komórkę na nową. Sieć wie, że teraz terminal nasłuchuje na nowej komórce i teraz kolejny pakiet z sieci do terminala, to od razu te dane idą w trybie RLC/MAC do nowej komórki, nie trzeba terminala wyszukiwać (brak pagingu). To upłynnia transfer pakietów do terminala.
+- STANDBY, terminal dłuższy czas z siecią milczał, to wtedy się zakłada, że on mógł się przemieścić i sieć zakłada, ze jego lokalizacja przestaje być znana. Terminal w tym stanie, przestaje wykonywać procedurę **Cell Update** (bo po co marnować zasoby sygnalizacyjne). Więc nie można do niego od razu przysłać pakietów na znaną komórkę pakietów. Dlatego wykonywany jest przed transmisją downlink paging.
+
+![](img2/33.png)
+
+### Kontekst PDP
+
+![](img2/34.png)
+
+Od MS do GGSN jest sesja PDP (tunel i potem GGSN odpakowuje pakiet IP).
+
+**Kontekst PDP** - to jest opis tych tuneli (od MS do GGSN). Znajduje się on w MS, SGSN i GGSN i zawiera następujące atrybuty:
+
+![](img2/35.png)
+
+> Terminal adres otrzymuje dopiero w czasie tworzenia kontekstu PDP, nie ma na stałe przypisane od operatora.
+
+TLLI + NSAPI to identyfikator, który rozróżnia terminalowi tunele. Terminal może mieć kilka tuneli, co wynika z tego, ze tunelowi są przypisane pewne paramsy dotyczące jakości usług. Jeśli terminal ma apki, które wymagają usług w różnych klasach QoS, no to z automatu jest kilka tuneli.
+
+#### GPRS Attach
+
+![](img2/36.png)
+
+Terminal po Attach dostaje TLLI  + NSAPI primary, czyli takie id domyślnego kontekstu PDP jaki może sobie utworzyć. Po zakończeniu Attach od razu (zazwyczaj tak terminale są skonfigurowane) tworzony jest taki domyślny kontekst PDP, który służy terminalowi do takiej bazowej komunikacji. Dopiero jak na terminalu działają jakieś wymyślne apki (multimedialne, głos, wideo itp.) i są te różne QoS'y, no to wtedy poza tym kontekstem domyślnym można tworzyć konkteksty dodatkowe.
+
+**NSAPI** - identyfikator punktu dostępowego do usługi sieciowej, wystawiany przez warstwę SNDCP (czyli znajduje się w SGSN). Jest to id apki na terminalu.
+
+> Tak akurat zrobiono, że technologia tunelowania między MS a SGSN to SNDCP, a między SGSN a GGSN to GTP. Bo SNDCP ma jakieś kompresje nagłówków (bo w radiu zakłócenia), GTP nie musi robić takich kompresji
+
+ ![](img2/37.png)
+
+#### Aktywacja kontekstu PDP
+
+Kontekst - opis tuneli, a nie same tunele* (tunel to stan urządzeń). Kontekst PDP nie jest tworem protokołu SNDCP. SNDCP tworzy sesje, która jest tworzona na bazie informacji definiowanych przez kontekst.
+
+> *Zauważ że zawsze mamy parę tuneli. Tunel SNDCP między MS-SGSN oraz tunel GRP między SGSN-GGSN.
+
+**Aktywny kontekst** - inaczej - terminal jest "widoczny" na zewnątrz sieci mobilnej, może się łączyć z innymi uczestnikami Internetu.
+
+Odwzorowanie adresu wewnętrznego sieci rdzeniowej obsługującej na adres PDP to zadanie SGSN/GGSN
+
+- Adres PDP dynamiczny (przyznawany w momencie tworzenia kontekstu, przez operatora)
+- Adres PDP statyczny (MS uzyskuje go na stałe od swojego operatora)
+
+![](img2/38.png)
+
+Aktywacja kontekstu (czyli opisu tuneli), to ustawienie stanu urządzeń (czyli stworzenie tuneli).
+
+- MS ma jakiś kontekst i chce go uaktywnić, więc wysyła **Activate PDP Context Request** do SGSN określając swoje wymagania co do tuneli, jaki typ (jedno czy dwukierunkowy), Adres PDP, jaki QoS, i terminal też wie, do jakiego Access Pointa chce się dołączyć
+
+- SGSN robi uwierzytelnianie, CAC i przedłuża do GGSN wiadomość **Create PDP Context Request**
+- GGSN gdy wszystko git, to zwraca **Create PDP Context Response**, i tunel między GGSN a SGSN jest przygotowywany
+- SGSN teraz przedłuża odpowiedzi **Activate PDP Context  Accept** i tunel między MS a SGSN jest przygotowywany (czyli tworzone jest połączenie LLC, żeby mogło ono wesprzeć transfer TBF'ów na rzecz sesji SNDCP).
+
+Identyfikatory kontekstu, to id tuneli.
+
+- Na styku SGSN-GGSN identyfikatorem tunelu jest IMSI+NSAPI
+
+- Na stuku MS-SGSN  identyfikatorem tunelu jest TLLI+NSAPI
+
+Oczywiście zestawienie tuneli  jest takie jak opisaliśmy w rozdziale "Warstwa RLC/MAC". No i te 4 wiadomości, też muszą mieć zarezerwowane zasoby w RLC/MAC, żeby zostały przesłane (jakimiś tam logicznymi kanałami sygnalizacji).
+
+#### Session Management
+
+Podsumowanie zarządzania sesją.
+
+![](img2/39.png)
+
+### Architektura protokołów GPRS
+
+![](img2/40.png)
+
+To że SNDCP nie obsługuje GMM/SM, to chodzi o to, że SNDCP nie trudnie się przekazywaniem pakietów warstw sterujących poziomu zarządzania mobilnością i poziomu zarządzania sesją. Ona służy do obsługi ruchu aplikacyjnego. 
+
+Za to LLC już oprócz obsługi SNDCP zajmuje się też przekazywaniem informacji warstw sterujących poziomu zarządzania mobilnością i poziomu zarządzania sesją.
+
+SNDCP - zajmuje się samą sesją aplikacji
+
+LLC - wybór komórki, szyfrowanie transmisji między MS-SGSN
+
+RLC/MAC - przesył informacji przez łącze radiowe.
+
+BSSGP - to taka wewnętrzna warstwa sieci GPRS, trudni się transportem z prymitywów LLC z BSS do SGSN, ale też QoS ona robi, no bo jest w sieci szkieletowej. Protokół nigdzie indziej niespotykany, nie ma się co go uczyć.
+
+GTP-U warstwa tuneli między SGSN a GGSN.
+
+![](img2/41.png)
+
+GGSN'ów może być wiele np. każdy jeden dedykowany innemu APN'owi - innemu charakterowi usług. Jeden do zwykłego WWW, drugi do video, trzeci do multimediów opartych o IMS.
+
+**SM - Session Management** - warstwa sterowania zarządzania sesją
+
+**GMM - Generic Mobility Management** - warstwa sterowania zarządzania mobilnością
+
+Warstwa sterownia z warstwy LLC korzysta w trybie **UnACK mode**, czyli nie oczekuje na jakieś tam potwierdzenia (do korekcji, retransmisji itp.), no bo to nie są dane użytkowe, chodzi tylko o przesyłanie na bieżąco info sterujące.
+
+![](img2/42.png)
+
+^Kto z kim przez kogo się komunikuje.
+
+Jak już jest kontekst to apka generuje pakiet i przez jakiś SAP podaje go do SNDCP, a SNDP podaje go do LLC mówiąc jaką klasę QoS zastosować i LLC patrząc na numer klasy przekazuje warstwie RLC/MAC odpowiednie parametry do przesłania tego pakietu
+
+<span style="color:red" >Czerwony scenariusz </span> to, gdy sieć chce coś przesłać do terminala i musi go zpagingować najpierw. Warstwa LLC ma TBF do wysłania i sprawdza przez GMM czy przypadkiem nie trzeba wykonać pagingu w stronę terminala, bo trzeba pobudzić terminal (nie jest on w stanie READY), nie chcemy wysłać pakietu w starą komórkę terminala, tylko w aktualną.
+
+## EDGE
+
+Technologia czyniąca 2.5G trochę wydajniejszą technologią do transferu pakietów.
+
+W GSM przepływność (wykorzystując kilka kanałów fizycznych na TCH) wynosiła do `kikudziesięciu kb/s`. W EDGE mamy do `300 kb/s` ale to też tak na maxa, panu Bursztynowskiemu nigdy nie udało się powyżej 200 wejść.
+
+Osiągnięto to na kilka sposobów:
+
+- modulacja 8-PSK (W GSM/GPRS było GMSK)
+- wprowadzono kilka klas kodów nadmiarowych (w zależność od szumów jakie są w propagacji stosowane są inne kody nadmiarowe)
+- jak RLC/MAC jak stworzy swój blok do wysłania, to okazuje się, że można z niego wyjąć parę bitów i przetransmitować taki wybrakowany blok, a po drugiej stronie dzięki kodowi nadmiarowemu zostaną one wyliczone. Nazywa się to **puncturing**.
+
+![](img2/43.png)
+
+## Egzamin
+
+![](img2/44.png)
+
